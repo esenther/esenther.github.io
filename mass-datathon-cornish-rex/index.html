@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="Team Cornish Rex" />
+
+    <title>MassVehicleExplorer</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="dist/css/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap theme -->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="style.css" rel="stylesheet" />
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body role="document">
+    <div class="navbar navbar-inverse navbar-static-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Cornish Rex</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#impact">Who impacts Whom?</a></li>
+            <li><a href="#car-data">Car Data Explorer</a></li>
+            <li><a href="#co2-data">CO2 Emissions</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#data-access">Data Access</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#license">License</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container" role="main">
+      <div class="page-header">
+        <a name=""></a><h1>Welcome!</h1>
+      </div>
+
+      <p>Have you ever wondered anything about cars and traffic? For the first time <strong>ever</strong>, a state has released information on all of the cars registered in the state. The Massachusetts Vehicle Census combines detailed (but anonymized) data from the Massachusetts Registry of Motor Vehicles and vehicle safety inspections as part of the <a href="http://www.37billionmilechallenge.org/">37 Billion Mile Challenge</a>.</p>
+      <p>We developed tools and visualizations to explore this data, and hope that you will have as much fun using the data as we had putting the tools together. To go to a specific section in this webpage, click a link below.</p>
+      <ul>
+        <li><a href="#car-data">Boston Car Data Explorer</a>: How does your driving compare to that of other people in your neighborhood? Did the car use in your zip code change between 2008 and 2011? How does driving in your zip code compare to that in other zip codes in Boston? The Boston Car Explorer lets you explore these questions and more.</li>
+        <li><a href="#impact">Who impacts whom?</a>: Traffic is related to air pollution, noise, and congestion. Which areas in the Boston metropolitan area have more traffic relative to the amount of driving done by cars registered in those areas? Which areas have cars that drive a lot, but don’t have much total traffic?</li>
+        <!--<p>[Kartik’s Plots]:</p>-->
+        <li><a href="#co2-data">Top 1000 CO2-equivalent emissions</a>: Explore the vehicle and household information of regions with the highest CO2-equivalent emissions.</li>        
+        <li><a href="#data-access">The Data</a>: Do you want to download the data and work with it yourself? Go here to see documentation, download the database, and find sample code to get started using the data.</li>
+        <li><a href="#about">About Us</a>: We are a group of developers, designers, data nerds, and transportation enthusiasts interested in using data to make a difference to Massachusetts residents. Formed at the 37 Billion Miles Datathon held in Boston, MA in March of 2014, we are looking to bring together different datasets using an open-source process to build compelling data-driven visualizations to help residents and policy makers get a better grasp on the state's driving habits and how this information can be used to improve the quality of life for the citizens of the Commonwealth.</li>
+      </ul>
+
+      <div class="page-header">
+        <a name="impact"></a><h1>Who impacts Whom?</h1>
+      </div>
+
+      <p>
+        Traffic is related to air pollution, noise, and congestion. Which areas in the Boston metropolitan area have more traffic relative to the amount of driving done by cars registered in those areas? Which areas have cars that drive a lot, but don’t have much total traffic? Traffic is related to air pollution, noise, and congestion. Which areas in the Boston metropolitan area have more traffic relative to the amount of driving done by cars registered in those areas? Which areas have cars that drive a lot, but don’t have much total traffic?
+      </p>
+      <p>
+        These maps compare the total miles traveled by locally registered vehicles to the total miles traveled. Red areas are highly impacted by region traffic. Not surprisingly, these areas are mainly along the interstate highways. Blue areas have cars with a lot of miles driven, but have relatively little traffic themselves. These areas tend to be outside of Boston and in areas with a lot of commuting. Can you find your city on the map? Is your community highly impacted, or is it affecting others?
+      </p>
+
+      <p class="text-center">
+        <a href="impact.png"><img src="impact-small.png" /></a><br/>
+        <small>Click the image above to see full size</small>
+      </p>
+
+      <div class="page-header">
+        <h3>Making of the Image</h3>
+      </div>
+
+      <p>This image of the vehicle miles traveled (VMT) divided by total miles per day in each traffic analysis zone (TAZ) highlights the inequality between places with more vehicle traffic and places where the registered cars drive more miles. Near-highway areas and the Boston metropolitan area pop out as places with exceptionally high traffic volumes and low driving.</p>
+
+      <p>Traffic due to passenger vehicles in each TAZ was obtained from grid_quarters_public (mipdaypass). Each grid was assigned to the TAZ which had the highest spatial overlap. TAZ and VMT layers were obtained through CTPS. The image was produced in QGIS.</p>
+
+      <code>
+# R code to generate the figure.<br/>
+library(RPostgreSQL)<br/>
+# Start Driver<br/>
+drv = dbDriver("PostgreSQL")<br/>
+<br/>
+# new connection<br/>
+con <- dbConnect(drv, user="massdrive",dbname="massdrivedata")<br/>
+<br/>
+# rs <- dbSendQuery(con,"select mipdaypass from grid_quarters_public")<br/>
+# mipdaypass = fetch(rs,n=-1)$mipdaypass<br/>
+# dbClearResult(rs)<br/>
+<br/>
+members <- dbSendQuery(con,"select g250m_id,taz_id from g250m_taz_membership")<br/>
+members = fetch(members,n=-1)<br/>
+# dbClearResult(members)<br/>
+<br/>
+mipdaypass <- dbSendQuery(con,"select g250m_id,mipdaypass from grid_quarters_public where quarter = '2010_q2'")<br/>
+mipdaypass = fetch(mipdaypass,n=-1)<br/>
+# dbClearResult(mipdaypass)<br/>
+<br/>
+taz_data_2010 <- dbSendQuery(con,"select taz_id,vmt from taz_data_2010")<br/>
+taz_data_2010 = fetch(taz_data_2010,n=-1)<br/>
+# dbClearResult(taz_data_2010)<br/>
+<br/>
+# Merge by grid miles per day to TAZ-grid membership table<br/>
+temp1 <- merge(members,mipdaypass,by="g250m_id")<br/>
+<br/>
+# Aggregate grid to TAZ level<br/>
+gridtotaz = aggregate(temp1$mipdaypass,by=list(temp1$taz_id),sum,na.rm=F)<br/>
+names(gridtotaz) = c("taz_id","mipdaypass")<br/>
+<br/>
+# Merge aggregated grid data to TAZ data<br/>
+temp2 <- merge(gridtotaz,taz_data_2010,by = "taz_id")<br/>
+temp2$ratio = ifelse(temp2$mipdaypass>0,temp2$vmt/temp2$mipdaypass,NA)<br/>
+<br/>
+# write to csv file<br/>
+write.csv(subset(temp2,!is.na(ratio)),"ratio2.csv",row.names=F)<br/>
+<br/>
+<br/>
+## Closes the connection<br/>
+dbDisconnect(con)<br/>
+<br/>
+## Frees all the resources on the driver<br/>
+dbUnloadDriver(drv)<br/>
+      </code>
+
+      <div class="page-header">
+        <a name="car-data"></a><h1>Boston Car Data Explorer</h1>
+      </div>
+
+      <p>How does your driving compare to that of other people in your neighborhood? Did the car use in your zip code change between 2008 and 2011? How does driving in your zip code compare to that in other zip codes in Boston? The Boston Car Data Explorer lets you explore these questions and more. <a href="dc_massdrive3/dc_massdrive_BOSTON.html" target="_new">Click here to start the demo</a></p>
+
+      <p>You will see these graphs:</p>
+      <ul>
+        <li>Vehicle mileage (mpg_adj_ave) compared to miles traveled per day: How efficient is your car compared to other cars?</li>
+        <li>What kind of vehicle (veh_type) dominates?</li>
+        <li>How many hybrid cars are registered?</li>
+        <li>What types of fuel are being used?</li>
+        <li>How old are most cars?</li>
+        <li>Which car makes are most popular?</li>
+      </ul>
+
+      <p>This was part of an investigation that focused on a popular subset of data -- 21 zip codes within just the Boston municipality. This provided a more manageable dataset with which to visually explore intersections of many filters using multi-dimensional charting. Household income demographic data was incorporated as a new filter. The resulting highly interactive "Boston Car Data Explorer" web page provides a sense of the variety of interacting factors, and can be extended to explore data for all of Massachusetts at the grid cell to county level. A next step in this effort would be to employ data analytics to identify alternative data sources for filters and measures, along with incorporating additional external data sources.</p>
+
+      <p class="text-center">
+        <a href="dc_massdrive3/dc_massdrive_BOSTON.html" ><img src="boston_car_data_explorer_1920x1080_screenshot.png" width="800" border="1" /></a><br />
+        <small>Click the image to see it full-size</small>
+      </p>
+
+      <p class="page-header">
+        <a name="co2-data"></a><h1>CO2 Emissions Data</h1>
+      </p>
+
+      <p><a href="dc_massdrive3/co2emissions.html">Top 1000 CO2-equivalent emissions</a>: Explore the vehicle and household information of regions with the highest CO2-equivalent emissions.</p>
+
+      <p class="text-center">
+        <a href="dc_massdrive3/co2emissions.html"><img src="screenshot_co2-small.png" /></a><br />
+        <small>Click the image to see it full-size</small>
+      </p>
+
+      <div class="page-header">
+        <a name="about"></a><h1>About Us</h1>
+      </div>
+
+      <p>We are a group of developers, designers, data nerds, and transportation enthusiasts interested in using data to make a difference to Massachusetts residents. Formed at the 37 Billion Miles Datathon held in Boston, MA in March of 2014, we are looking to bring together different datasets using an open-source process to build compelling data-driven visualizations to help residents and policy makers get a better grasp on the state's driving habits and how this information can be used to improve the quality of life for the citizens of the Commonwealth.</p>
+
+      <div class="page-header">
+        <h3>Team Members <small> (alphabetical order)</small></h3>
+      </div>
+
+      <div style="height: 360px;">
+      <div style="float:left; clear:left; margin: 1em 0;">
+        <img src="alexis.jpg" width="64px" style="float:left; margin-right: 1em;" />
+        <p>Alexis Chan - Alexis is a software engineer at MathWorks with experience in building user-interfaces for visualizing data.</p>
+      </div>
+
+      <div style="float:left; clear:left; margin: 1em 0;">
+        <img src="alan.jpg" width="64px" style="float:left; margin-right: 1em;" />
+        <p>Alan Esenther - Alan is a research scientist/chief software engineer with interests in data visualization, big data, GIS and full stack development. He has worked in corporate (Mitsubishi Electric Research Labs) and startup (Circle Twelve Inc.) environments, focusing on both research prototypes/papers/patents and on product development.
+
+      </div>
+
+      <div style="float:left; clear:left; margin: 1em 0;">
+        <img src="allison.jpg" width="64px" style="float:left; margin-right: 1em;" />
+        <p>Allison Patton - Allison is a researcher with the Community Assessment of Freeway Exposure and Health at Tufts University. Her research focuses on measuring and modeling the effects of traffic on air quality for use in epidemiological exposure assessment.</p>
+      </div>
+
+      <div style="float:left; clear:left; margin: 1em 0;">
+        <img src="evan.png" width="64px" style="float:left; margin-right: 1em;" />
+        <p>Evan Patton - Evan is a Ph.D. student at Rensselaer Polytechnic Institute working in the areas of data science, knowledge representation, and artificial intelligence. He is passionate about making data open and accessible in order for it to reach its full potential. He has experience in full stack web development and his thesis focuses on analyzing energy consumption and performance of artificial intelligent systems for mobile phones.</p>
+      </div>
+      </div>
+
+      <div class="page-header">
+        <a name="data-access"></a><h1>Data Access</h1>
+      </div>
+
+      <p>We have collected a number of notes about our efforts to better model the underlying data as well as various quality control methods we looked at. Please visit our data wiki <a href="https://github.com/mass-datathon-cornish-rex/data/wiki">on GitHub</a> to access these additional materials, including a SQL dump and instructions for setting up your own copy of the database we used for generating these visualizations.</p>
+
+      <div class="page-header">
+        <a name="contact"></a><h1>Contact</h1>
+      </div>
+
+      <p>If you have any questions about the datasets we've generated, please feel free to
+      contact us via our <a href="https://groups.google.com/forum/#!forum/team-cornish-rex">
+          Google Groups</a> page.</p>
+
+      <div class="page-header">
+        <a name="license"></a><h1>License</h1>
+      </div>
+
+      <p>All source code generated by the team &copy; 2014 Alexis Chan, Alan Esenther, Allison Patton, &amp; Evan Patton and are released under the <a href="https://www.gnu.org/licenses/agpl-3.0.html">Affero GNU Public License v3</a>.</p>
+
+      <p class="text-center"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">MassVehicleExplorer</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">Team Cornish Rex</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.<br />Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="http://www.37billionmilechallenge.org/" rel="dct:source">http://www.37billionmilechallenge.org/</a>.</p>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>DiamondTouch Mouse User's Manual</title>
+<style type="text/css">
+<!--
+body,td,th {
+	font-family: Arial, Helvetica, sans-serif;
+}
+.style1 {font-size: small}
+.style2 {font-size: x-small}
+.style3 {font-size: small; font-weight: bold; }
+-->
+</style>
+</head>
+<body>
+<h1 align="center">DiamondTouch Mouse Users Manual</h1>
+<p align="center" class="style2">Copyright 2008 Circle Twelve Inc.. Patent pending. All rights reserved.</p>
+<!--
+<p><a href="DiamondTouch%20Mouse%20Installation.htm">Installation</a></p> 
+-->
+<p>DiamondTouch Mouse (DTMouse.exe) converts DiamondTouch touch table events to mouse events. Use DiamondTouch Mouse to interact with any Windows program via the touch table. Run DTCalibrate before starting DTMouse, and any time the system Display resolution is changed.<em> (Note: always exit and restart DTMouse after running DTCalibrate.)</em> Also see the <a href="Troubleshooting DiamondTouch Mouse.htm">Troubleshooting DiamondTouch Mouse</a> page. Here's a video of <a href="videos/DTMouseBasicButtons.wmv">basic operations with DTMouse</a>. Here's a video of the feature that lets touchers <a href="videos/DTMouseScreenshotScribbling.wmv">simultaneously scribble on a screenshot</a>. </p>
+<p align="center"><img src="images/DTMouse_splashScreen.jpg" alt="DiamondTouch About screen" width="376" height="296" align="top" /></p>
+<p align="center" class="style1"><strong>Figure 1: The DiamondTouch Mouse splash screen. This window also appears if you select &quot;About DiamondTouch Mouse...&quot; from the system tray icon context menu. This document (&quot;DiamondTouch Mouse Users Manual&quot;) is accessible via the HELP button  on the splash screen.</strong></p>
+<blockquote>
+  <p><strong>Clicking and dragging:</strong> Simply tap or double-tap on the table with one finger to click or double-click, respectively. Holding down one finger will hold down the left mouse button, so simply drag with one finger to drag with the mouse. </p>
+  <p><strong>Right-clicking and dragging with the right mouse button:</strong> To  right-click, hold your first finger down at the place where you want to send the right-click, then <em>immediately</em> tap (down then up) the table somewhere else nearby with a second finger while the first finger is still down. At this point you can either drag with your first finger to right-drag, or lift up your first finger to send a right-click. That is, the right mouse button is pressed when the second finger stops touching the table, and the right mouse button is released when you stop touching the table with your first finger, too. </p>
+  <p><strong>Middle-clicking and dragging with the middle mouse button:</strong> Same as for right-clicking/right-dragging, but tap <em>twice</em> with the second finger instead of once. </p>
+  <p><strong>Moving the mouse:</strong> Put two fingers down on the table at the <em>same</em> time to move the mouse cursor to the location directly between your two fingers. Note that this is different from touching with one finger because the left mouse button will not be pressed. Then move your two fingers together to move the mouse cursor, which stays centered between them. Let go with both fingers at the same time, too. If you let go with one finger first, the mouse may jump to the other finger (though it's pretty good about detecting your intention). </p>
+  <p><strong>Aiming more precisely: </strong>When you put two fingers down at the same time to move the mouse without dragging, as described above, you are in Precision-Hover Mode. In this mode you can precisely position the mouse cursor location by simply moving one or both of your fingers since the mouse cursor stays at the point centered between your two fingers. This is handy because if you put only one finger down, it can be difficult to position the mouse precisely since your finger is obscuring the mouse cursor. <br />
+    <br />
+    <em>Hint: When setting up your projector, under-project onto the table a little so that there is a 1/2 inch or so &quot;black border&quot; all around the projected display. This makes it easier to precisely touch into corners and along the display borders using Precision-Hover mode.</em></p>
+  <p><strong>Clicking more precisely:</strong> While in Precision-Hover Mode (2 fingers still down), tapping briefly (down then up) anywhere with a 3rd finger  will press the left mouse button <em>down</em> at the location centered between the first two fingers (<em>not</em> at the location where the 3rd finger touches). Subsequently tapping with the 3rd finger a second time will send a left mouse button <em>up</em> event. </p>
+  <div align="center"><img src="images/1-two fingers down_small.jpg" width="200" height="150" /> <img src="images/2-move mouse_small.jpg" width="200" height="150" /> <img src="images/3-third finger down_small.jpg" width="200" height="150" /> <img src="images/5-drawing_small.jpg" width="200" height="150" /> <span class="style1"><strong><br />
+    Figure 2.  Using Precision-Hover mode to transition between moving the mouse and drawing  with the mouse. In the first two images in the sequence, the mouse stays  centered between the thumb and middle finger as the fingers are moved, but the  left mouse button is not depressed so no drawing occurs. In the third image,  the user taps briefly with the index finger to toggle the state of the left  mouse button. The final image in the sequence shows that moving the thumb and  middle finger now causes a line to be drawn since the left mouse button has  been engaged</strong>.</span><br />
+  </div>
+</blockquote>
+<p>The behavior of DiamondTouch Mouse is configurable via the context menu of the DiamondTouch Mouse system tray icon (shown expanded in Figure 4) and a configuration file. </p>
+<p><strong>The DiamondTouch Mouse system tray icon and its context menu </strong></p>
+<p>The DiamondTouch Mouse program puts an icon in the Windows system tray (the notifications area) in the Windows Taskbar. The icon will change depending on whether mouse emulation is currently enabled, disabled, or muted. Mouse emulation is disabled if there is no DiamondTouch table plugged in, or if it becomes unplugged. It will automatically switch to enabled when a table is plugged in. Mouse emulation is muted via the context menu. Right-click or left-click the icon to bring up the context menu. </p>
+<p align="center"><img src="images/DTMouse_3systray_icons.gif" width="72" height="25" /><span class="style1"><br />
+  <strong>Figure 3: The DiamondTouch Mouse system tray icons showing touching enabled (left), muted (center), and disabled (right).</strong></span></p>
+<p align="center"><img src="images/DTMouse_contextMenu.jpg" width="260" height="217" /></p>
+<p align="center" class="style3">Figure 4: The context menu for the DiamondTouch Mouse system tray icon </p>
+<p>From the top:</p>
+<ol>
+  <li><strong>Mute </strong><br />
+    <br />
+    If this option is enabled, then DiamondTouch Mouse will ignore touch inputs until this option is disabled. This is handy for temporarily running another touch-aware application at the same time. Otherwise, both DiamondTouch Mouse and the other touch application may both process the same touch input, which could result in, for example, double-clicking a touch-aware button when a single-click was intended. This would happen if the touch-aware button responds to both touch input (from the touch-aware application) and mouse input (generated by DiamondTouch Mouse). <br />
+    <br />
+    Note: DiamondTouch Mouse includes a feature which allows you to toggle the Mute state by holding down your fist (as though pounding on the table) and then quickly tapping 4 times elsewhere with a single finger (while the fist is still down). The fist and single finger must be at least 30cm apart (configurable), to prevent accidental triggering. Also, if the four taps are performed too slowly it will not toggle the Mute state. This is to help prevent inadvertent toggling. A common mistake is to tap too slowly, and then forget to briefly stop touching with both the fist and finger before trying again. <br />
+    <br />
+  </li>
+  <li><strong>Open On-Screen Keyboard...</strong><br />
+    <br />
+    This option is just a link to the Window On-Screen Keyboard utility that ships with the Microsoft Windows operating system. A screenshot is shown below. </li>
+  <p align="center"><img src="images/OnScreenKeyboard_screenshot.gif" width="612" height="195" /><br />
+    <span class="style3">Figure 5: The built-in Windows On-Screen Keyboard utility</span></p>
+  Note: DiamondTouch Mouse includes a feature which allows you to toggle the On-Screen Keyboard visibility by holding down your fist (as though pounding on the table), then tapping 3 times elsewhere with a single finger (while the fist is still down), and then lifting up with the fist. Unlike the fist+taps gesture which toggles muting, it does not matter how slowly the taps occur, and the On-Screen Keyboard visibility is not toggled until the fist is lifted <em>off</em> the table. However, the fist and single finger must be at least 30cm apart (configurable), to prevent accidental triggering. A common mistake is to tap incorrectly, and then forget to briefly stop touching with both the fist and finger before trying again. <br />
+  <br />
+  <li><strong>Enable Annotate-Screenshot via fist </strong><br />
+    <br />
+    If this option is enabled, then pressing down with your fist (as though you were pounding on the table) along the left edge of the table and then moving your fist in a straight horizontal line to the right edge before lifting up your fist will cause DiamondTouch Mouse to take a screenshot of the current screen and enter an annotation mode. Moving your fist from right to left rather than left to right works, too. Your fist has to travel horizontally over half of the display width to trigger the screenshot. You will know when you are in annotation mode because there will be a yellow border around the image as shown in Figure 6. <br />
+    <p align="center"><img src="images/Annotate-Screenshot-global-menu.jpg" alt="Annotate-Screenshot screenshot" width="500" /><br />
+      <span class="style3">Figure 6: Swiping horizontally with your fist allows you to annotate the current screenshot. The yellow border indicates that this is a screenshot rather than the live windows desktop, and that touches will be interpreted as annotations. </span></p>
+    While in Annotate-Screenshot mode, tapping with your finger while your fist is held down on the table will open a global menu containing options for &quot;Save...&quot;, &quot;Erase All&quot;, &quot;Exit&quot;, and &quot;Cancel&quot;. <br />
+    <p align="center"><img src="images/Annotate-Screenshot-global-menu-details.jpg" alt="Annotate-Screenshot screenshot" width="413" height="115" /><br />
+      <span class="style3">Figure 7: Details of global menu options available via the Fist+Tap gesture while in Annotate-Screenshot mode. </span></p>
+    The &quot;Save...&quot; option will prompt for a location at which to save the current screenshot and annotations (but not the yellow border) as a JPEG file. The &quot;Erase All&quot; option erases all of the current annotations. The &quot;Exit&quot; option terminates the Annotate-Screenshot mode, so that touch events will be interpreted as mouse events again. The &quot;Cancel&quot; option closes the menu. <br />
+    <br />
+    Any toucher can press with five fingers at the same time to bring up a toucher-specific menu. <br />
+    <p align="center"><img src="images/Annotate-Screenshot-toucher-specific-menu.JPG" alt="Annotate-Screenshot screenshot" width="400" align="middle" /> <img src="images/Annotate-Screenshot-toucher-specific-menu-details.JPG" alt="Details of the toucher-specific menu" width="354" height="254" align="middle" /><br />
+      <span class="style3">Figure 8: Details of toucher-specific menu options available via the 5-finger-tap gesture while in Annotate-Screenshot mode. </span></p>
+    These menu options are used to change a toucher's annotation pen color and thickness. Touchers can simultaneously open their own toucher-specific menus, but any toucher may touch anyone else's menu as well. The &quot;Undo&quot; button erases the most recent annotation created by the toucher who touches that button. <br />
+    <br />
+  </li>
+  <li><strong>Enable mouse wheel via fist </strong><br />
+    <br />
+    If this option is enabled, then pressing down with your fist (as though you were pounding on the table) and moving your fist in straight line towards the top or bottom of the table will scroll the mouse wheel forwards or backwards. The mouse wheel events will be sent to whichever application is currently in the foreground. <br />
+    <br />
+    Note that  applications such as Internet Explorer only respond to mouse wheel events if the mouse cursor is located inside the web page currently being displayed. The mouse wheel is ignored if the cursor is outside Internet Explorer, or even if it is over the menu bar or status bar. Other applications, such as Notepad, will accept mouse wheel events no matter where the cursor is located on the display, as long as the Notepad application itself is  the foreground application (i.e. has mouse focus).<br />
+    <br />
+  </li>
+  <li><strong>Enable Precision-Hover Mode </strong><br />
+    <br />
+    Particularly at higher display resolutions, it may be difficult to precisely position the mouse with one finger because your finger is obscuring the mouse cursor. If Precision-Hover Mode is enabled, then you can make the mouse cursor move to the location centered directly <em>between</em> two fingers, thus affording a better view of the mouse cursor. Subsequently moving either or both fingers allows you to precisely position the mouse cursor. <br />
+    <br />
+    To enter Precision-Hover Mode, put  two fingers down on the table at the <em>same</em> time. The mouse will immediately move to the location centered in between the two fingers, and stay centered as you move those two fingers around the table. To press the left mouse button down while in Precision-Hover Mode, tap quickly with a third finger (it doesn't matter where). (Note that the left mouse button will be pressed down at the midpoint of the first two fingers, <em>not</em> at the location of the third finger.) Tap with the third finger again to release the left mouse button. Continued tapping with the third finger will continue to toggle the left mouse button. Whenever you let go with both fingers, you will exit Precision-Hover Mode. If the left mouse button is currently pressed, then be sure to let go with both fingers at the same time so that the left mouse button will be released immediately (without jumping to the finger that is still down). <br />
+    <br />
+  </li>
+  <li><strong>Enable right mouse button </strong><br />
+    <br />
+    To right-click, put one fingertip down wherever you want the right-click to be sent. Then quickly tap with a second finger (your thumb works best) somewhere else on the table. As you lift up the second finger, the right mouse button is pressed down at the location of the first finger. At this point you can drag with the first finger to drag with the right mouse button. Once you lift up the first finger, too, the right mouse button is released at the the location of the first finger. <br />
+    <br />
+    This menu option enables (default) or disables this capability. You may want to disable this capability if you find that users are inadvertently sending right-clicks. <br />
+    <br />
+  </li>
+  <li><strong>Enable helper text overlays </strong><br />
+    <br />
+    This option causes information messages from DiamondTouch Mouse to be displayed at the top of the display. Example messages are &quot;Too many fingers down&quot; and &quot;Right mouse button engaged&quot;. These are are handy for beginners, but the option is disabled by default so that messages do not obscure any existing content on the display. Disabling this option will also enable the &quot;Enabled CTRL-SHIFT-ALT support&quot; option, since that option requires overlaying text about what key is currently being virtually pressed. <br />
+    <br />
+  </li>
+  <li><strong>Enable CTRL-SHIFT-ALT support </strong><br />
+    <br />
+    This option can be used to virtually press the CTRL, SHIFT or ALT mouse button modifier keys using just your fingers. If this option is enabled, then tapping repeatedly with five fingers at the same time will cycle through holding down the CTRL key, the SHIFT key, the ALT key, and releasing all keys. When enabled, tapping repeatedly to virtually press the modifier keys will result in a text message being displayed at the top of the screen which says &quot;CONTROL key pressed&quot;, &quot;SHIFT key pressed&quot;, &quot;ALT key pressed&quot;, or &quot;No key pressed&quot;. This message will persist until another five-finger tap is used to cycle to the next message. The exception is that the &quot;No key pressed&quot; message only appears while the five fingers are in contact with the table. Enabling this option automatically turns on the &quot;Enable helper text overlay&quot; option, but disabling this option does not turn off that option. Disabling that option will disable this option, too.  <br />
+    <br />
+    Example: to use the CTRL key to multi-select filenames in Windows Explorer, tap with five fingers once. Then tap with one finger (i.e. the left mouse button) on each filename to be selected. Tap with five fingers three times in a row to cycle through the SHIFT and ALT keys to the &quot;No key pressed&quot; state. The files are now multi-selected.<br />
+    <p align="center"><img src="images/VirtuallyPressingTheCTRLkey.jpg" alt="Tap with 5 fingers repeatedly to cycle through virtually pressing the CTRL, SHIFT, ALT, or no mouse button modifier keys" width="811" height="575" /><br />
+      <span class="style3">Figure 9: Tap with 5 fingers repeatedly to cycle through virtually pressing the CTRL, SHIFT, ALT, or no mouse button modifier keys.</span></p>
+  </li>
+  <li><strong>Close this menu</strong><br />
+    <br />
+    Close the DiamondTouch Mouse context menu. This does not turn off (or on) mouse emulation or exit the program. <br />
+    <br />
+  </li>
+  <li><strong>Exit DiamondTouch Mouse</strong><br />
+    <br />
+    Use this to stop DiamondTouch Mouse, and remove it from the system tray.<br />
+    <br />
+  </li>
+  <li><strong>About DiamondTouch Mouse...</strong><br />
+    <br />
+    This brings up the information window shown in Figure 1, above. The Close button on the window shown in Figure 1 just dismisses that window -- it does not exit DiamondTouch Mouse. The Help button displays this &quot;DiamondTouch Mouse Users Manual&quot; web page in the default web browser. <br />
+  </li>
+</ol>
+<p align="left">To make the DiamondTouch Mouse program always start up when the computer is turned on, put a shortcut to DTMouse.exe in C:\Documents and Settings\All Users\Start Menu\Programs\Startup (or similar). </p>
+<p align="left">Many of the parameters of DiamondTouch Mouse are configurable via the config.xml file in the same directory as DTMouse.exe.</p>
+<p align="left" class="style1">Note that DiamondTouch touch tables currently have a USB bug that make them hang if the system goes into Standby. If the touch table or DTMouse.exe is not responding, unplug the DiamondTouch USB cable for a moment. If ever necessary, use the &quot;End Process&quot; button on the Processes tab of the Windows Task Manager to kill an unresponsive DTMouse.exe (it won't appear in the Applications tab, since it runs in the system tray). Though not required, it is probably best to Disable or Exit DiamondTouch Mouse while running another application that uses the DiamondTouch table. </p>
+<p>&nbsp;</p>
+</body>
+</html>

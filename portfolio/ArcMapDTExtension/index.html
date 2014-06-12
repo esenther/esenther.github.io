@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>ArcMap DiamondTouch Extension</title>
+<style type="text/css">
+<!--
+body,td,th {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: smaller;
+}
+.style1 {font-size: 12px}
+.style2 {font-size: 9px}
+.style4 {font-family: "Courier New", Courier, monospace}
+.style5 {font-size: smaller}
+-->
+</style>
+</head>
+<body>
+<h1 align="center">ArcMap DiamondTouch Extension 1.7.38</h1>
+<div align="center" class="style2">Copyright 2008 Circle Twelve Inc. All rights reserved. </div>
+<p>The ArcMap DiamondTouch extension is an extension for ArcMap 9.2+  GIS software which provides support for simultaneous symbol-drawing by up to four users of a multi-user multi-touch DiamondTouch table. See the <a href="#Prerequisites">Prerequisites</a> and <a href="#Installation">Installation</a> instructions below. This tool is used in conjunction with the  DiamondTouch Mouse mouse emulation tool (DTMouse) that ships with DiamondTouch. DiamondTouch is the <strong>only</strong> touch table that lets touchers   draw  with different colors or symbols at the same time using just their fingers. The ArcMap DiamondTouch extension integrates this capability into ArcMap. It not only lets people interact at the same time, but it also keeps track of <em>who did what</em>. By turning on and off different toucher-specific layers (by toucher and/or by symbol-type), it's easy to see which elements were added by which participants. Users can also use multi-finger gestures to zoom and pan without explicitly changing the selected tool. These capabilities make the DiamondTouch extension ideal for Emergency Operations Centers, disaster response, and any collaborative situations that can benefit from the more effective communications that are realized with face-to-face discussions.</p>
+<table width="200" border="0" align="center">
+  <tr>
+    <td><a href="images/ArcMapDiamondTouchExtension-screenshot.gif"><img src="images/ArcMapDiamondTouchExtension-small-screenshot.gif" alt="Screenshot of ArcMap with the DiamondTouch extension" width="350" height="219" border="0" /></a></td>
+    <td><a href="images/DiamondTouch.jpg"><img src="images/DiamondTouch.jpg" alt="DiamondTouch" height="219" /></a></td>
+  </tr>
+  <tr>
+    <td><div align="center"><a href="images/DTExtension.jpg"><span class="style1">Click for larger image</span></a></div></td>
+    <td><div align="center" class="style1"><a href="images/DiamondTouch.jpg">A multi-user multi-touch DiamondTouch table </a></div></td>
+  </tr>
+</table>
+<h2>User Interface </h2>
+<p>When the &quot;Simultaneous Element Sketching&quot; mode is selected from the left side of the DiamondTouch toolbar:</p>
+<p align="center"><img src="images/DiamondTouchExtensionToolbarCloseUp.gif" alt="ArcMap DiamondTouch extension toolbar" width="159" height="27" /> </p>
+<p>then up to four touchers can simultaneously draw pen, marker, line or area symbols with their fingers on a DiamondTouch table. The second button on the toolbar, which looks like a slider bar, is used to open a toucher timeline, described later. The third button opens a Properties form, also described later. The buttons labeled 1 through 4 on the DiamondTouch toolbar will toggle the visibility of the corresponding toucher's dedicated dockable toolbar window, described next. Note that the DiamondTouch toolbar will be disabled until at least one layer of map data is added to the current document, and that elements which touchers create will use the same spatial reference as the active map data frame.</p>
+<p>Each toucher has a dedicated toolbar with which to select a drawing symbol:</p>
+<p align="center"><img src="images/ToucherToolbarCloseup.gif" alt="Each toucher has a dedicated dockable symbol selectiion toolbar" width="241" height="65" /> </p>
+<p>Click the pen, marker, line or area symbol radio button to select one of those tools to make that the active tool for that toucher. Then double click on the thumbnail of the symbol on the right side of this toolbar to open a Symbol Selector dialog. Use this dialog to select a different symbol from within the class of symbols, such as &quot;Highway&quot; or &quot;River&quot; when the &quot;Lines&quot; tool is selected. When the delete button is selected in a touchers toolbar, then that toucher can drag his finger to indicate a rectangle in which to delete any of his intersecting elements. Note that by default a toucher cannot delete another touchers elements. The toolbars are dockable windows, which facilitates undocking them to park them near the side of the table at which the corresponding toucher is sitting. </p>
+<p>As touchers draw symbols on the map, the symbols are organized in the Table-of-Contents tree by toucher, and then by symbol category (&quot;Scribbles&quot;, Markers&quot;, &quot;Lines&quot;, &quot;Areas&quot;) in a new layer in the currently active  data frame.</p>
+<p align="center"><img src="images/TouchersLayerCloseup.gif" alt="The Table-Of-Contents organizes toucher symbols by toucher and by symbol type" width="254" height="599" /></p>
+<p>These toucher-created elements are dynamically saved to a file-based geodatabase that is created on-the-fly when the first toucher element is created. The name and location of this toucher geodatabase can be specified using the DiamondTouch Extension Properties form, described below, only <em>before</em> the first toucher element is added. Otherwise a default name for the geodatabase will be created based on the current document that is loaded, such as &quot;streets_mxd-ToucherElements-2007-06-30-01-32-02.gdb.&quot; Note that if there are multiple data frames (maps), then each will have its own Touchers layer, but  all of the toucher-created features will be saved to this same geodatabase. <em>[WARNING: In this release, renaming the &quot;Touchers&quot; or &quot;Toucher 1&quot; through &quot;Toucher 4&quot; layers is not supported, yet.]</em> If the user decides not to save the document when it is closed, and it has not been saved yet, then the geodatabase will  also not be persisted. </p>
+<p>Since toucher-created elements are normal ArcMap features, they can subsequently be modified using the other ArcMap tools even on machines that do not have the DiamondTouch extension. For example, a user can start a regular editor session with the Editor toolbar to modify toucher elements. </p>
+<p>Add at least one layer of map content before attempting to enable the  &quot;Simultaneous Element Sketching&quot; command button. Toucher-created elements will use the spatial reference of the visible content. </p>
+<p>Also note that  when the &quot;Simultaneous Element Sketching&quot; button is pressed, then touchers can independently and simultaneously each draw with their selected symbol into the map data view area of ArcMap. But when touching anywhere else (such as file menus, the Table-Of-Contents layers, toolbars, and symbol selection pop-up dialogs) the first toucher to touch will assume control of the mouse. Other touchers will be ignored until the first toucher stops touching (&quot;gives up&quot; the mouse). This  DTMouse functionality  assures that the mouse won't  jump all over the display as different people touch the table and try to fight for control of the mouse. Note that since the toucher toolbars and the Symbol Selector dialog rely on the mouse, only one toucher can be touching one of these at a time. </p>
+<p>To delete a symbol element as it is being created -- before lifting up the finger being used to draw the element -- simply tap briefly with a second finger anywhere on the display. The in-progress element will be erased, and further touch inputs from that toucher will be ignored until that toucher first stops touching with all fingers. </p>
+<h3>Multi-Touch Gestures</h3>
+<p>While the DiamondTouch toolbar is activated, one toucher at a time can pan or zoom the current map view using multi-touch gestures. Panning is performed by simultaneously placing 3 or more fingers on the map image area on the table and then dragging them. Zooming is performed by simultaneously placing 2 fingers on the map image on the table on either side of the location at which to zoom. </p>
+<p align="center"><img src="images/2_FINGER_ZOOM_ZOOMED_OUT.JPG" alt="Using two fingers to zoom - two fingers with zoomed-out image" width="198" height="148" /><img src="images/2_FINGER_ZOOM_ZOOMED_IN.JPG" alt="Using two fingers to zoom - two fingers with zoomed-in image" width="198" height="148" /> &nbsp;&nbsp;<img src="images/FIVE_FINGER_PAN.JPG" alt="Using five fingers to pan" width="198" height="148" /><br />
+<strong>Using 2 fingers to zoom</strong><strong>. Use 5 fingers to pan</strong></p>
+<p>When zooming, hold the two fingers stationary for a second or two (to register the action). You'll know it's registered and ready for zooming when 2 vertical lines (lines of longitude) appear beneath each finger.  Then dragging  one or both fingers horizontally apart (or together) will precisely zoom the map in (or out). The map will zoom in or out about the current mid-point (along the x-axis) of the two fingers -- not just about the original mid-point. Therefore it is possible to change the center point of the zoom while zooming. Effectively, the initial two finger locations  specify two lines of longitude which can be &quot;dragged&quot; together or apart (one at a time or both together) until the desired extent is achieved. Those two lines of longitude remain under the toucher's fingers as the fingers move. These multi-touch features can be turned on or off in the DiamondTouch Extension Properties form, described below. Hint: turn on the ArcMap Overview Map (Window &gt; Overview) while using multi-touch gestures to keep track of which part of the map is currently being viewed. WARNING: These techniques are only suitable for maps which can render fairly quickly. </p>
+<p>To help  insure coherent behavior, once a user has started panning or zooming, other touchers will be ignored until that user stops touching. Similarly, if any toucher is currently drawing, then no other touchers can start panning or zooming, although they can simultaneously draw. </p>
+<h3>Touchers Timeline</h3>
+<p>The DiamondTouch toolbar  includes a button  called  &quot;Timeline of toucher elements&quot; with the image of a  slider control. When clicked, this creates a temporary &quot;Touchers Timeline&quot; layer in the Table Of Contents containing all toucher elements in the Touchers layer. It also creates a dockable window containing a &quot;Toucher Element Timeline&quot; slider. This slider can be dragged back and forth to reveal the toucher elements in the order that they were created. When the &quot;Toucher Element Timeline&quot; window is closed, or when the Timeline button on the DiamondTouch toolbar is clicked again, the &quot;Toucher Element Timeline&quot; window is closed and the &quot;Touchers Timeline&quot; layer in the Table of Contents is removed. The &quot;Touchers&quot; layer is automatically unchecked (invisible) while the timeline is open. Note that any toucher elements that are deleted from the geodatabase using the ArcMap Editor will no longer appear in the timeline, but those deleted  via the delete button in a touchers toolbar will still appear in the timeline (assuming the timeline is played back in time to the point where that element existed). WARNING: This technique is only suitable for maps which can render fairly quickly. </p>
+<p align="center">&nbsp;</p>
+<p align="center"><img src="images/ToucherTimelineCloseup.gif" alt="Toucher Timeline" width="465" height="166" /><br />
+  <br />
+  <span class="style5">The toucher timeline button on the main DiamondTouch toolbar opens the Toucher Element Timeline. Drag this slider left or right to replay the sequence of toucher element creations and deletions.</span><br />
+  <br />
+</p>
+<p align="center"><img src="images/TouchersTimelineLayerCloseup.gif" alt="Touchers Timeline layer" width="353" height="668" /><br />
+  <span class="style5">When the toucher timeline is opened, the Touchers layer is temporarily duplicated then unchecked. The duplicated layer (named Touchers Timeline) is linked to the timeline slider shown above.</span></p>
+<p align="center"></p>
+<h3>DiamondTouch Extension Properties </h3>
+<p>The button with the picture of a wrench in the DiamondTouch toolbar opens the  DiamondTouch Extension Properties dialog. This can be used to configure settings as explained in the dialog. </p>
+<p align="center"><img src="images/PropertiesDialog.gif" alt="ArcMap DiamondTouch extension Properties dialog" width="586" height="466" /></p>
+<p>The path to the Toucher Geodatabase can only be specified before the first toucher element has been created. Once any toucher element has been added to the map, the Name and Directory text fields above, as well as the Browse and Create buttons, become disabled. As a convenience, right-clicking on the &quot;Touchers&quot; layer in the table of contents and selecting &quot;Remove&quot; will delete not only the layers in the table of contents, but the contents of the underlying toucher geodatabase as well. The user will be prompted and may cancel the deletion of the toucher geodatabase at this time. Once the toucher geodatabase is empty, all of the controls in the Toucher Geodatabase portion of the Properties dialog shown above will become enabled so a different Directory and Name can be specified. To save a set of toucher elements in order to create new elements, save a copy of the map document itself (e.g. &quot;File &gt; Save As...&quot; SanFrancisco--withToucherScribbles2007-01-01.mxd&quot;). If no Name and Directory are specified ahead of time, a geodatabase with a default name (similar to that shown in the image above) will be created in the &quot;My Documents&quot; directory.<em> NOTE: The ArcMap DiamondTouch extension will never modify any geodatabase except for the toucher geodatabase that it creates. </em></p>
+<h2>Mouse Emulation </h2>
+<p>The ArcMap DiamondTouch extension is used in conjunction with the  DiamondTouch Mouse mouse emulation utility (DTMouse) that ships with DiamondTouch. DTMouse lets you generate all mouse input via touch gestures. Handy DTMouse tricks: Tap or drag with one finger to left click or drag with the left mouse button. To right click, put one finger down then immediately briefly tap (down then up) with a second finger somewhere else. The right mouse button is now being held down. Drag to do a right-drag, or let go immediately to do a right-click. The middle mouse button works the same way except the second finger should tap twice instead of once to hold down the middle mouse button. Touching with two fingers at the same time will cause the mouse to move to the center of the two fingers without pressing any mouse buttons. This is a convenient way to accurately place the mouse with a view unobscured by your fingers. With two fingers still touching, quickly tapping anywhere with a third finger will toggle the left mouse button. Drag your fist vertically to scroll the mousewheel up or down.</p>
+<h2>ArcEditor/ArcInfo Compatibility</h2>
+<p>The ArcMap DiamondTouch extension works with ArcView, ArcEditor and ArcInfo. Since it is designed to support quick, casual addition of symbols to support a collaborative discussion, there is no need to start an Editing Session. Toucher elements are created or deleted on-the-fly, using a separate Toucher geodatabase that it creates. All of the existing functionality of ArcMap, ArcEditor and ArcInfo (as well as any other extensions) can still be used as is from the table using the DTMouse mouse emulation utility.</p>
+<h2> Prerequisites<a name="Prerequisites" id="Prerequisites"></a> </h2>
+<blockquote>
+  <p>Windows 2000 or Windows XP (any version of XP).<br />
+    ArcMap 9.3 (ArcView, ArcEditor or ArcInfo)<br />
+    DiamondTouch 2.1+<em> [Users should be familiar with using their fingers to control the mouse, as described in the DiamondTouch Mouse Users Manual.] </em><br />
+  ArcGIS must be installed with the .NET Support option checked to insure that the ESRI .NET Assemblies are installed on the client. If the &quot;C:\Program  Files\ArcGIS\DotNet&quot; directory does not exist, then no extensions written in .NET can be used. .NET 3.5 is used. </p>
+</blockquote>
+<h2>Installing the DiamondTouch Extension <a name="Installation" id="Installation"></a></h2>
+<ol>
+  <li> Make sure you've installed the latest ESRI Service Pack updates. The <a href="DotNet Support Feature for ArcGIS.html">ESRI .NET Support Feature</a> is also required, as described in the Prerequisites, above.</li>
+  <li>Run the ArcMap DiamondTouch Extension installer (.msi). </li>
+  <li>Start the DTMouse mouse emulation utility that ships with DiamondTouch.</li>
+  <li>Start up ArcMap using any existing map content and go to Tools &gt; Extension... menu option and make sure that &quot;DiamondTouch&quot; is checked.</li>
+  <li> Open the DiamondTouch toolbar by clicking on View &gt; Toolbars &gt; DiamondTouch to check that menu item. The toolbar will be disabled until the current ArcMap document contains at least one layer of map content. </li>
+  <li>Click the &quot;Simultaneous Element Sketching&quot; command button on the DiamondTouch toolbar.</li>
+  <li>While touching one of the four DiamondTouch receivers, scribble in the map area with your finger. If it fails to draw a symbol initially, just restart ArcMap to make sure that ArcMap picks up the configuration changes.</li>
+</ol>
+<h2>Uninstalling the DiamondTouch Extension </h2>
+<blockquote>
+  <p>Use the Windows &quot;Add or Remove Programs&quot; mechanism. </p>
+  <p>Note that uninstalling the extension also un-registers the DiamondTouchEx.ocx ActiveX control that DTMouse uses. You can re-register that control by opening a DOS prompt in C:\Program Files\Circle Twelve\DiamondTouch SDK 2.2\bin (or wherever it was installed) and executing <span class="style4">C:\WINDOWS\system32\regsvr32.exe DiamondTouchEx.ocx</span>. </p>
+</blockquote>
+<h2>Notes on upgrading from ArcGIS 9.2 to 9.3</h2>
+<blockquote>
+  <p>Uninstall the ArcMap DiamondTouch Extension before uninstalling ArcGIS 9.2. Use the Windows &quot;Add or Remove Programs&quot; mechanism. </p>
+  <p>Note that uninstalling the extension also un-registers the DiamondTouchEx.ocx ActiveX control that DTMouse uses. You can re-register that control by opening a DOS prompt in C:\Program Files\Circle Twelve\DiamondTouch SDK 2.2\bin (or wherever it was installed) and executing <span class="style4">C:\WINDOWS\system32\regsvr32.exe DiamondTouchEx.ocx</span>. </p>
+  <p>After installing ArcDesktop 9.3, and re-registering the DiamondTouchEx.ocx ActiveX control, install the new (9.3) version of the ArcMap DiamondTouch extension (1.7.34+).</p>
+</blockquote>
+<h2>Hints</h2>
+<blockquote>
+  <p>If you ever have trouble starting ArcMap or opening a map document (.mxd file) because of  corrupted Toucher information, just delete the toucher geodatabase (.gdb directory; e.g. My Documents\streets_mxd-ToucherElements-2008-08-30-11-59-46.gdb) used by the map document that you're trying to open and then restart ArcMap. </p>
+</blockquote>
+</body>
+</html>

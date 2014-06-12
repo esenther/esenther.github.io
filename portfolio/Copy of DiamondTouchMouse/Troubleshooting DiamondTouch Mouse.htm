@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>DiamondTouch Mouse FAQ</title>
+<style type="text/css">
+<!--
+body,td,th {
+	font-family: Arial, Helvetica, sans-serif;
+}
+.style2 {font-size: x-small}
+.style3 {color: #FF0000}
+-->
+</style>
+</head>
+<body> 
+<h1 align="center">Troubleshooting DiamondTouch Mouse </h1> 
+<p align="center" class="style2">Copyright 2008 Circle Twelve Inc. All rights reserved.</p> 
+<p><strong>1&gt; Nothing happens when I touch. Why not?</strong></p>
+<ol>
+  <li>You are not in contact with one of the receiver pads</li>
+  <li>Your receiver pad has become unplugged from the receiver cable, or the receiver cable has become unplugged from the back of the DiamondTouch table. </li>
+  <li> The DiamondTouch USB cable is not plugged in</li>
+  <li>DiamondTouch Mouse is not running</li>
+  <li>DiamondTouch Mouse is currently muted </li>
+  <li>Someone else is touching the table (Windows only lets one person use the mouse at at time, so the first person to touch controls the mouse).</li>
+  <li>Perhaps there are noise issues or cross talk between users. Have everyone stop touching for a moment, and then have just one person try touching. The DiamondTouch SDK ships with a visual diagnostic utility (dtdiag.exe) that is handy for &quot;seeing&quot; noise. Use the DTSettings noise threshold tool or the dtdiag utility to adjust noise thresholds as needed. </li>
+  <li>The system is not calibrated properly, so your touches are not going where you think they are. Use DTCalibrate or dtdiag to re-calibrate the projected image to the touch table. Always exit and restart DTMouse.exe after changing noise or calibration settings. </li>
+  <li>See notes below. <br />
+  </li>
+</ol>
+<p><strong>2&gt; I can't get the right/middle mouse button clicking or dragging to work. </strong></p>
+<ul>
+  <li>This may take practice. This is an important thing to remember:
+    <ul>
+      <li><em> <span class="style3">if things aren't working, the first thing to do is to <strong>stop touching the table! </strong></span></em>This will abort any partial gesture in progress.  </li>
+    </ul>
+  </li>
+  <li>Make sure that you tap <em>immediately</em> with the second finger after putting your first finger down. Otherwise it will interpret your touch as a left mouse button. </li>
+  <li>Sometimes the right or middle mouse button <em>is</em> properly engaged, but the application does not give any visual feedback until you move your finger. </li>
+  <li>Again, if a right or middle button press didn't seem to occur, then first stop touching with <em><strong>both</strong></em> fingers before trying again. </li>
+</ul>
+<p><strong>3&gt; Quick taps sometimes don't work. </strong></p>
+<ul>
+  <li>You're probably touching too quickly. When touching with 2 fingers, be mindful of whether the 2 fingers are supposed to touch at the same time, or first one and then the other. </li>
+</ul>
+<p><strong>4&gt; Why does it sometimes mute, or launch the on-screen keyboard unexpectedly?</strong></p>
+<ul>
+  <li>By default, holding down one fist and then tapping 3 times toggles the on-screen keyboard, and 4 times toggles the mute state. If you tap too quickly, or if it doesn't detect the tap count properly then <em><strong>stop touching the table</strong> (with your fist, too)</em> before trying again. </li>
+</ul>
+<p><strong>5&gt; How can I make it go faster?</strong></p>
+<ul>
+  <li>Buy a faster DiamondTouch table. Larger size tables run more slowly than the smaller models. But keep in mind that DiamondTouch tables do not currently sample as fast as a mouse, for example. </li>
+  <li>There is also a slight delay when using Precision-Hover mode, as compared to just using one finger. This is so that the system can accurately detect entering and exiting the mode. Otherwise, it is possible that a transient signal from one of the fingers as it touches or stop touching the table may distort the precise location of the mouse cursor.</li>
+  <li>Turn off  the &quot;Enable helper text overlays&quot; option. This option draws overlays informational messages on the top of the display, which may cause a minor performance delay depending on what applications and video hardware is being used. </li>
+  
+  <p><strong>6&gt; I just re-calibrated -- why isn't the mouse going exactly where I touch?</strong></p>
+  <ul>
+  <li>You have to restart DTMouse after re-calibrating or it will continue to use the original calibration. </li>
+</ul>
+<p align="left">Many of the parameters of DiamondTouch Mouse are configurable via the config.xml file in the same directory as DTMouse.exe. </p>
+<p align="left">Note that DiamondTouch touch tables currently have a USB bug that make them hang if the system goes into Standby. If the touch table or DTMouse.exe is not responding, unplug the DiamondTouch USB cable for a moment. </p>
+<p align="left">If all else fails, use the &quot;End Process&quot; button on the Processes tab of the Windows Task Manager to kill an unresponsive DTMouse.exe (it won't appear in the Applications tab, since it runs in the system tray). </p>
+</body>
+</html>

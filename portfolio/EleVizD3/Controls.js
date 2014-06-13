@@ -127,6 +127,10 @@ var initGUI = function() {
         currentRow = parseInt(this.value);
         updateCars(liftPositionsArray[currentRow].liftHeights);
     });   
+	$("#slider_timestep").on("input", function(){ 
+        currentRow = parseInt(this.value);
+        updateCars(liftPositionsArray[currentRow].liftHeights);
+    }); 
 
     $("#img_play").click(function() {
         if ($("#img_play").attr('src').indexOf('play') > 0) {

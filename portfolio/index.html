@@ -21,6 +21,10 @@
 			margin-left: 10px; 
 			margin-right: 10px; 
 		}
+		.indent5
+			margin-left: 5px; 
+			margin-right: 5px; 
+		}
 	</style>  
 
 </head>
@@ -84,6 +88,7 @@
 			.append("a")
 			.attr("href", function(d) { return d.image_url; })
 			.append("img")
+			.attr("class", "indent5")
 			.attr("src", function(d) { return d.thumbnail_url; })
 			.attr("alt", function(d) { return d.title; });
 		diventer

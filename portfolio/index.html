@@ -1,667 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Alan Esenther - Projects</title>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+  <title>Alan Esenther - Projects</title>
+  <!-- Pre-load jquery and D3 to process projects.txt data -->
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="js/jquery-1.11.1.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-	<style>	
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
 
-	</style>
-  </head>
-  <body>
+</head>
+<body>
+    <div class="container">
+		<div class="row">
+			<div class="col-md-12 text-center">
+				<h1>Projects</h1>
+			</div>
+		</div>
+
+		<hr>
+
+	<script>
+	d3.tsv("portfolio.txt", function(error, data) {
+		data.forEach(function(d) {
+			d.thumbnail_url = d.image_url.substring(0,d.image_url.length-4) + "_thumbnail.png";
+			d.thumbnail_url = "images/thumbnails/" + d.thumbnail_url.substring(d.thumbnail_url.indexOf("\/")+1);
+			console.log(d.thumbnail_url);
+		});
+
+		/* 
+		Generate thumbnails for each project like this:
+
+		<div class="col-md-3 col-sm-6 col-xs-12">
+			<div class="thumbnail">
+				<a href="images/MassVehicleExplorer_screenshot.png">
+					<img src="images/thumbnails/MassVehicleExplorer_screenshot_thumbnail.png" alt="Boston Car Data Explorer">
+				</a>
+				<div class="caption">
+					<h3>Boston Car Data Explorer</h3>
+					<p>Won Collaborative Data Award in 2014...</p>
+				</div>
+			</div>
+		</div>
+		*/
+
+		var diventer = d3.select("body").select("div.container")
+			.append('div')
+			.attr("id", "allcols")
+			.attr("class", "row")
+			.selectAll("div")
+			.data(data)
+			.enter()					
+			.append('div')
+			.attr("class", "projectcol col-md-3 col-sm-6 col-xs-12")
+			.append("div")
+			.attr("class", "thumbnail");	
+
+		diventer
+			.append("a")
+			.attr("href", function(d) { return d.image_url; })
+			.append("img")
+			.attr("src", function(d) { return d.thumbnail_url; })
+			.attr("alt", function(d) { return d.title; });
+
+		diventer
+			.append("div")
+			.attr("class", "caption")
+			.append("h3")
+			.text(function(d) { return d.title; });
+
+		diventer.select(".caption")
+			.append("p")
+			.html(function (d) { return d.description; });	
+	});
+
+	$(document).ready(function() { /* wait til content is stable to inject fixes */
+		setTimeout('setClearfixes()', 1000);
+	});
+
+	function setClearfixes() { /* nb: use nth-of-type, not nth-child! */
+		$('div.projectcol:nth-of-type(4n)').after('<span class="clearfix hidden-xs hidden-sm "></span>');
+		$('div.projectcol:nth-of-type(2n)').after('<div class="clearfix hidden-xs hidden-md hidden-lg "></div>');
+	}
+	
+	</script>  
+        
+    </div>  <!-- end class="container" -->
   
-      <div class="navbar navbar-default">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Alan Esenther resume</a>
-          </div>
-          <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-              <li><a href="#">Home</a></li>
-              <li class="active"><a href="#projects">Projects</a></li>
-			  <li><a href="#resume">Resume</a></li>
-              <li><a href="#contact">Contact</a></li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Explore Projects<b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="#">Force-directed</a></li>
-                  <li><a href="#">By company</a></li>
-                  <li><a href="#">By domain (GIS, DB)</a></li>
-                  <li class="divider"></li>
-                  <li class="dropdown-header">Nav header</li>
-                  <li><a href="#">By skills (language, technology)</a></li>
-                </ul>
-              </li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-	  
-	  
-          <div class="panel panel-primary">
-            <div class="panel-heading">
-              <h3 class="panel-title">Projects</h3>
-            </div>
-            <div class="panel-body">
-			
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Boston Car Data Explorer</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/MassVehicleExplorer_screenshot.png">
-									<img src="images/MassVehicleExplorer_screenshot.png" alt="Boston Car Data Explorer" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Won Collaborative Data Award in 2014 doing work for the Mass. D.O.T. and MAPC in the <a href="http://www.37billionmilechallenge.org/">"37 Billion Mile Data Challenge"</a>. Contributed the <a href="https://mass-datathon-cornish-rex.github.io/#car-data">Boston Car Data Explorer</a> interactive data visualization tool (<a href="https://mass-datathon-cornish-rex.github.io/dc_massdrive3/dc_massdrive_BOSTON-1920x1080.html">1920x1080 version</a>) using <a href="http://d3js.org/">D3.js</a>, <a href="http://square.github.io/crossfilter/">crossfilter</a>, <a href="http://dc-js.github.io/dc.js/">dc.js</a>. Our submission was the <a href="https://mass-datathon-cornish-rex.github.io/">MassVehicleExplorer</a>.
-							</td>
-						</tr></table>
-					</div>
-				</div>
-				
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">D3.js Elevator Simulator</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/EleVizD3.png">
-									<img src="images/EleVizD3.png" alt="D3.js Elevator Simulator" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Created an interactive visualization of a multi-shaft, double-car elevator scheduling algorithm using first Flash/AS3/Flex then D3.js. Extensive regression testing revealed significant congestion problems with very high traffic loads. Elevator visualization also revealed a "frozen lift" situation that would not have been caught otherwise. See it running <a href="EleVizD3/EleVizD3.html">here</a>.
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-
-				
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Power Load-Flow Algorithm Performance Visualization</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/LoadFlowViz_screenshot.png">
-									<img src="images/LoadFlowViz_screenshot.png" alt="Power Load-Flow Algorithm Performance Visualization" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Created multi-dimensional charts and map animations to compare algorithm performance for a power load-flow analysis project. <a href="images/LoadFlowViz.mp4">MP4 Video</a>
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-				
-				
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Precision Hover</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/Precision_Hover_Collage.jpg">
-									<img src="images/Precision_Hover_Collage.jpg" alt="Precision Hover" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Invented elegant precision-hover gesture capability (not available in current tablets and touchscreens) that allows touchers to precisely target single pixels on the touch display. Many user experience tasks such as this required many iterations to achieve the desired effect. This work was for the <a href="Copy of DiamondTouchMouse/DiamondTouch Mouse Users Manual.htm">DTMouse mouse emulation utility</a> for the DiamondTouch SDK by <a href="http://circletwelve.com/">Circle Twelve Inc.</a>. <a href="Videos/PrecisonHoverOverAfricaHiQuality.wmv">Video</a>
-							</td>
-						</tr></table>
-					</div>
-				</div>
-				
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">DiamondTouch Immersion Distributed Architecture</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/DiamondTouch_Immersion_Distributed_Architecture.jpg">
-									<img src="images/DiamondTouch_Immersion_Distributed_Architecture.jpg" alt="DiamondTouch Immersion Distributed Architecture" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Developed WebSockets-based distributed touch capability for video conferencing system to connect remote tables for immersive simultaneous interaction. This was for the <a href="http://www.circletwelve.com/products/immersion.html">DiamondTouch Immersion</a> product.
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">DiamondTouch Immersion Remote Arms</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/DiamondTouch_Immersion_Remote_Arms.jpg">
-									<img src="images/DiamondTouch_Immersion_Remote_Arms.jpg" alt="DiamondTouch Immersion Remote Arms" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Extended multi-user scribbling application to support remote users. Remote users show up as "glowing arms" as they scribble. This was for the <a href="http://www.circletwelve.com/products/immersion.html">DiamondTouch Immersion</a> product.
-							</td>
-						</tr></table>
-					</div>
-				</div>					
-				
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">DTCollaborate for ESRI ArcGIS</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/ArcGISplugin.JPG">
-									<img src="images/ArcGISplugin.JPG" alt="DTCollaborate for ESRI ArcGIS" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Created comprehensive ESRI ArcGIS ArcMap extension to bring collaborative capabilities to the GIS community, including unique layer-aware interaction-history.  This was for the <a href="http://www.circletwelve.com/products/dtcollaborate.html">DTCollaborate for ESRI's ArcGIS</a> product.
-								<br><a href="Videos/ArcMapDiamondTouchExtensionScreenCapture.wmv">Features Video</a>
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-				
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Multi-User Multi-Touch SDK</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/DiamondTouch_in_MERL_lobby.jpg">
-									<img src="images/DiamondTouch_in_MERL_lobby.jpg" alt="Multi-User Multi-Touch SDK" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Created the contents and packaging for the DiamondTouch SDK, which includes application, demo and utility software with code modules for C, Java, C#/VB.NET, D3.js, Flash, JavaScript.
-								See all DiamondTouch product videos at <a href="http://circletwelve.com/videos.html">http://circletwelve.com/videos.html</a>.
-							</td>
-						</tr></table>
-					</div>
-				</div>					
-				
-				
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Decision Surface Explorer Tool</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/ASM_demo_screenshot-2012-04-24.jpg">
-									<img src="images/ASM_demo_screenshot-2012-04-24.jpg" alt="Decision Surface Explorer Tool" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Tool (for Automatic Schema Matching project) to interactively explore scatterplot decision surfaces (C# Forms). 
-							</td>
-						</tr></table>
-					</div>
-				</div>					
-				
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Multi-User Multi-Touch Flash Toolkit</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/DTFlash.jpg">
-									<img src="images/DTFlash.jpg" alt="Multi-User Multi-Touch Flash Toolkit" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Developed Flash toolkit for creating multi-user (DiamondTouch) games, apps, tools with Adobe Flash.
-								<br><a href="Videos/RotatingAndFlickingDocuments.wmv">Flick documents video</a>.
-								<br><a href="Videos/veggies_with_3_people.wmv">Veggies game video</a>.
-							</td>
-						</tr></table>
-					</div>
-				</div>		
-				
-				 
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Optimal Route Demo</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/OptimalRouteDemo_screenshot.jpg">
-									<img src="images/OptimalRouteDemo_screenshot.jpg" alt="Optimal Route Demo" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Transformed 250GB telematics database for use with a demo that visually compares 3 route proposal algorithms using Google Earth animations.
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-				
-				
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Power Theft Viz</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/PowerTheftViz_4dims_EachHas2Sides.jpg">
-									<img src="images/PowerTheftViz_4dims_EachHas2Sides.jpg" alt="Power Theft Viz" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								[Experimental] 3D visualization of power theft data.
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-
-				
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Collaborative Web Browsing</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/CollaborativeWebBrowsing_poster.png">
-									<img src="images/CollaborativeWebBrowsing_poster.png" alt="Collaborative Web Browsing" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Developed Collaborative Web Browsing (lightweight, real-time, collaborative co-browsing) shown at 2002 International WWW Conference (HTML, JavaScript, Java Servlets); 
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-				
-				
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Web Application (HTML5, jQuery, DataTables) to Process GPS data</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/ProcessGPX_screenshot.jpg">
-									<img src="images/ProcessGPX_screenshot.jpg" alt="Collaborative Web Browsing" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Collected GPS data from volunteers for an automotive HMI project (to predict and propose driver actions). Created HTML5 web page that volunteers could use to upload, browse, and modify their GPS traces. This used HTML5 features (FileReader), jQuery, the jQuery DataTables plugin, and the Google Maps API. Developed web-based trip data visualizations to impress stakeholders and find problems (Google Earth & Maps). http://www.mitsubishielectric.com/news/2014/0210.html
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-
-				
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Metadata Visualization</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/Metadata_Visualization.png">
-									<img src="images/Metadata_Visualization.png" alt="Metadata Visualization" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Took over Java (Prefuse) metadata visualization tool development to meet deliverable deadline.
-								Finished interactive GUI with emphasis on visual layouts and real-time exploration. Provided multiple linked views of the data. Each view uses a specialized layout algorithm to highlight salient points. Linked views so that user’s actions are visible in all layouts -- changes in one layout influence other layout. Layouts are interactive and dynamic to support user exploration.
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-				
-			</div>
-          </div>	  
-		  
-	
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Multi-user Game</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/veggies.png">
-									<img src="images/veggies.png" alt="Multi-user Game" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Multi-user game to demonstrate multiple users interacting at the same time in a game (long before touch tablets and touch screens became popular). Pivot and fire to destroy junk food without destroying healthy food. In-depth Flash development. Designed full game architecture, interactions, use of graphics/sound, etc. <a href="Videos/veggies_with_3_people.wmv">Video</a>
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-				
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Gesture exploration - flick documents</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/FlickDocuments.png">
-									<img src="images/FlickDocuments.png" alt="Gesture exploration - flick documents" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Developed layout to let touch table users spin a carousel-style desktop and flick documents back and forth. 
-								<br><a href="Videos/RotatingAndFlickingDocuments.wmv">Flick-Documents Video</a> 
-								<br><a href="Videos/GestureEngine_with_Flash.wmv">Gesture Engine Visualization Video</a>
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-	
-		  
-		  
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Multi-User Touch Mouse Emulation</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/DTMouse_State_Machine.png">
-									<img src="images/DTMouse_State_Machine.png" alt="Multi-User Touch Mouse Emulation" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Developed Windows mouse support via touch. This <a href="Copy of DiamondTouchMouse/DiamondTouch Mouse Users Manual.htm">DTMouse mouse emulation utility</a> was a critical component of the DiamondTouch SDK. It allowed touch tables to be used to drive the Windows OS and applications -- long before Windows added touch support in Windows 8. <a href="Videos/DTMouse.mp4">DTMouse Video</a>
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-
-		  
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Database Development for Car HMI project</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/CarHMIViz_for_TokyoMotorShow.png">
-									<img src="images/CarHMIViz_for_TokyoMotorShow.png" alt="Database Development for Car HMI project" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Over 6 billion raw GPS and CAN-bus data items collected for an automotive HMI project (to predict and propose driver actions) required a database and extensive cleanup. 
-								<ul>
-								<li style="list-style-type:square">Architected a database including a 600-column table for feature generation. Extensive PL/pgSQL and Python coding to perform data cleansing and address out-of-memory problems (with Python, WEKA, PostgreSQL/PostGIS, and connectors). Project was completed on time and promoted as "Ultra-simple Predictive HMI" in 2014.</li>
-								<li style="list-style-type:square">Developed algorithms for area familiarity, trip segmentation, coalescing data.</li> 
-								<li style="list-style-type:square">Developed web-based trip data visualizations to impress stakeholders and find problems (Google Earth & Maps).</li> 
-								</ul>
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-				
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Driver Familiarity Algorithm and Heat Map for Car HMI project</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/CarHMI_heatmaps.png">
-									<img src="images/CarHMI_heatmaps.png" alt="Driver Familiarity Algorithm and Heat Map for Car HMI project" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Develop a numerical estimator of how familiar the driver is with the current area. Provide it as a feature (input) to the driver prediction algorithm. Can change the customization mode of the car HMI depending on uses, e.g. commute vs. sightseeing. First familiarity estimator used the number of times a road segment has been traversed. Another familiarity estimator used the distance to the existing traces to estimate familiarity represent familiarity as a heat map.
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-
-				
-				
-				
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Database Schema Matching Project (Project Lead)</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/ASM_project_context_poster.png">
-									<img src="images/ASM_project_context_poster.png" alt="Database Schema Matching Project (Project Lead)" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Principal Investigator and sole implementer for a two-year Automatic Schema Matching (ASM) project to automatically merge database schemas. Major components included the ASM framework API, object design, process modules, dozens of matchers (e.g. lexical, structure, composite), utility programs for similarity matrices aggregation (combine matcher results) and alignment extraction (choose matches from similarity matrices), and a complete Python regression system. Developed in Java and Python on Windows, then ported to Linux.
-								<ul>
-								<li style="list-style-type:square">Succeeded in achieving ambitious 90.1% matching accuracy goal. </li>
-								<li style="list-style-type:square">Developed a 3D scatterplot tool to interactively compare two schemas using various matchers (Java Swing/jogl/jzy3d), and another tool to interactively explore scatterplot decision surfaces (C# Forms). </li>
-								<li style="list-style-type:square">Two-year project successfully completed on-time and was incorporated into a larger data integration platform. </li>							
-								</ul>
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-		
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Schema matcher similarity exploration tool</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/ASM_demo_matcher_similarity_explorer.png">
-									<img src="images/ASM_demo_matcher_similarity_explorer.png" alt="Schema matcher similarity exploration tool" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Developed a 3D scatterplot tool to interactively compare two schemas using various schema matchers. User can select 2 database schemas to compare, then select from one of dozens of matching algorithms to apply. Scatterplot of elements in each schema is color-coded to show correct matches (green), incorrect matches (red), and missed matches (yellow). The height indicates the similarity value for the element pair using the currently-selected matcher. Coded using Java Swing/jogl/jzy3d. <br/>
-								Example matchers include PrefixNameMatcher, SynonymMatcher, TriGramDistanceMatcher, LevenshteinStringMatcher, NameMatcher, PathNameMatcher, ChildPathMatcher, SiblingMatcher, StructureMatcher, LinearCompositeMatcher. 
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-				
-
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">SOA Web Integration Project</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/SOA_WrapperDesignTool_system_architecture.png">
-									<img src="images/SOA_WrapperDesignTool_system_architecture.png" alt="SOA Web Integration Project" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Web Integration project sponsor needed a way to programmatically interact with arbitrary websites (e.g. for ordering parts) that are designed only for mouse/keyboard interaction. Developed a Mozilla Firefox plugin as part of an SOA (Service-Oriented Architecture) Integration solution. (Experimented with SWT and Eclipse RCP; developed plugin with XUL, WSDL, RDF, ActiveX support)
-								<ul>
-								<li style="list-style-type:square">Determined that the best solution would be a browser plugin to capture all mouse/keyboard interactions with an existing website. The plugin automatically generated an intelligent web service wrapper (WSDL/RDF), which allowed the website to be accessed entirely programmatically. Project successfully completed and delivered on time. </li>
-								<li style="list-style-type:square">Demonstrated the final system by writing a multi-component data visualization that dynamically retrieved electricity cost information from an NSTAR website to create color-coded 3D bar charts of energy costs on an interactive 3D view of Massachusetts (C#, embedded web browser, JavaScript, HTML, CSS, generated KML).</li>
-								</ul>
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-				
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Multi-user Multi-touch Map Exploration Application</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/DTMap_NewMedia_magazine_cover.png">
-									<img src="images/DTMap_NewMedia_magazine_cover.png" alt="Multi-user Multi-touch Map Exploration Application" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Created a custom multi-user multi-touch map application featured in cover story of Japanese New Media magazine.
-							</td>
-						</tr></table>
-					</div>
-				</div>				
-				
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Interactive energy cost data visualization</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/SOA_WrapperDesignTool_example_application.png">
-									<img src="images/SOA_WrapperDesignTool_example_application.png" alt="Interactive energy cost data visualization" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Demonstrated the final SOA Web Integration project (described elsewhere) by writing a multi-component data visualization that dynamically retrieved electricity cost information from an NSTAR website to create color-coded 3D bar charts of energy costs on an interactive 3D view of Massachusetts (C#, embedded web browser, JavaScript, HTML, CSS, generated KML).</li>
-								</ul>
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">Multi-Touch Gestures for Controlling Synchronized Multi-Surface Map Views</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/synchronized_map_views_collage.png">
-									<img src="images/gesture_to_control_zoom_and_orientation_with_inset.png" alt="Multi-Touch Gestures for Controlling Synchronized Multi-Surface Map Views" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Created multi-surface map application to present at the ESRI International User Conference (GIS) as "Multi-Touch Gestures for Controlling Synchronized Map Views” (C#, embedded browser, KML, ArcGIS).
-								Simultaneously synchronized views across multiple applications: ESRI ArcGIS, Google Earth, maps in web browser, and a custom application. A web service was used to synchronize the applications. 
-								<br/>Can control a local or a remote secondary view(s). Secondary viewport is determined by:
-									<ul>
-									<li>Location: Mid-point of 2 touch points</li>
-									<li>Rotation: Angle between 2 touch points</li>
-									<li>Zoom: How far apart you move the two touch points</li>
-									</ul>
-								<a href="Videos/Multi-Touch Gestures in ArcGIS for Controlling Synchronized Google Earth Views.wmv">Video</a>
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-				
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">MATLAB and Java/Swing development for Power Theft Detection project</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/PowerTheftDemo.png">
-									<img src="images/PowerTheftDemo.png" alt="MATLAB and Java/Swing development for Power Theft Detection project" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Ported MATLAB algorithm code to Java for  Power Theft Detection project. Then developed Swing (JFreeChart) exploration tool and demo. Also experimented with a 3D data visualization of unusual findings (described elsewhere).
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-				
-
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-					  <h3 class="panel-title">HTML5 jQuery DataTables application</h3>
-					</div>
-					<div class="panel-body">
-						<table><tr>
-							<td valign="top">
-								<a href="images/Schema Match Optimizer webpage.png">
-									<img src="images/Schema Match Optimizer webpage.png" alt="HTML5 jQuery DataTables application" width="200" border="1" />
-								</a>
-							</td>	
-							<td>&nbsp;&nbsp;&nbsp;</td>
-							<td valign="top" >
-								Developed a web interface for optimizing schema matching results that works in conjunction with the MERL Automatic Schema Matching (ASM) framework. The tool is written with HTML5, jQuery, and the DataTables jQuery plugin. It generates an interactive table from ASM output, which can be used to perform heavy sorting and filtering operations to look for optimal matching results. 
-							</td>
-						</tr></table>
-					</div>
-				</div>	
-				
-				
-<!--
-► directed integration of a train voltage optimization demo with existing Qt 
-► CarHMI Tokyo Motor Show demo (Google Earth)
-► Automating the MERL ASM Framework with Python-ver7 (SCREENSHOT FOR PYTHON & JAVA GROUPINGS?)
-► Running the MERL ASM Framework (SCREENSHOT FOR PYTHON & JAVA GROUPINGs?)
-► 
-► Divide by languages, libraries, APIs, Software, Technologies, OS, Standards
--->
-
-				
-				
-			</div>
-          </div>	
-		  
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-  </body>
+    <script src="js/bootstrap.js"></script>
+</body>
 </html>

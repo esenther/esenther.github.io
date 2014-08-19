@@ -72,30 +72,35 @@
 			.attr("class", "panel-title")
 			.text(function(d) { return d.title; });
 
-		diventer
+		panelbody = diventer
 			.append("div")
-			.attr("class", "panel-body")
+			.attr("class", "panel-body");
+
+		panelbody
+			.append("div")
 			.append("a")
 			.attr("href", function(d) { return d.image_url; })
 			.append("img")
 			.attr("class", "img-responsive")
+			.attr("class", "my_pullleft")
 			.attr("src", function(d) { return d.thumbnail_url; })
 			.attr("alt", function(d) { return d.title; });
-		diventer
-			.append("br");
-		diventer
+		panelbody
+			.append("br")
+			.attr("class", "hidden-xs ");
+		panelbody
 			.append("p")
 			.attr("class", "indent")
 			.html(function (d) { return d.description; });				
 	});
 
 	$(document).ready(function() { /* wait til content is stable to inject fixes */
-		setTimeout('setClearfixes()', 1000);
+		setTimeout('setClearfixes()', 500);
 	});
 
-	function setClearfixes() { /* nb: use nth-of-type, not nth-child! */
+	function setClearfixes() { /* nb: use nth-of-type, not nth-child. And make one a span so as not to confuse jQuery. */
 		$('div.projectcol:nth-of-type(4n)').after('<span class="clearfix hidden-xs hidden-sm "></span>');
-		$('div.projectcol:nth-of-type(2n)').after('<div class="clearfix hidden-xs hidden-md hidden-lg "></div>');
+		$('div.projectcol:nth-of-type(2n)').after('<div  class="clearfix hidden-xs hidden-md hidden-lg "></div>');
 	}
 	
 	</script>  

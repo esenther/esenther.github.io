@@ -1,9 +1,21 @@
 
-  .indent { 
-    margin-left: 10px; 
-    margin-right: 10px; 
-  }
-  .indent5
-    margin-left: 5px; 
-    margin-right: 5px; 
-  }
+	.indent { 
+		margin-left: 10px; 
+		margin-right: 10px; 
+	}
+
+	// Allow images to pull left on smartphones
+	@media (max-width: 768px) {
+		.my_pullleft {
+			float: left;
+    		margin-left: 5px; 
+    		margin-right: 5px; 		  
+		}
+	}
+
+	// The pull-left media selector turns off img-responsive unless do this:
+	@media (min-width: 769px) {
+		.my_pullleft {
+			max-width: 100%;	  
+		}
+	}  

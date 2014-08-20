@@ -85,6 +85,8 @@
 			.attr("src", function(d) { return d.thumbnail_url; })
 			.attr("alt", function(d) { return d.title; });
 		panelbody
+			.append("br")
+		panelbody
 			.append("p")
 			.attr("class", "indent")
 			.html(function (d) { return d.description; });				

@@ -29,7 +29,7 @@
 	d3.tsv("portfolio.tsv", function(error, data) {
 		data.forEach(function(d) {
 			d.thumbnail_url = d.image_url.substring(0,d.image_url.length-4) + "_thumbnail.png";
-			d.thumbnail_url = "images/thumbnails/" + d.thumbnail_url.substring(d.thumbnail_url.indexOf("\/")+1);
+			d.thumbnail_url = "project_images/thumbnails/" + d.thumbnail_url.substring(d.thumbnail_url.indexOf("\/")+1);
 			console.log(d.thumbnail_url);
 		});
 
@@ -41,8 +41,8 @@
 						  <h2 class="panel-title">Boston Car Data Explorer</h2>
 						</div>
 						<div class="panel-body">
-							<a href="images/MassVehicleExplorer_screenshot.png">
-								<img src="images/thumbnails/MassVehicleExplorer_screenshot_thumbnail.png" alt="Boston Car Data Explorer">
+							<a href="project_images/MassVehicleExplorer_screenshot.png">
+								<img src="project_images/thumbnails/MassVehicleExplorer_screenshot_thumbnail.png" alt="Boston Car Data Explorer">
 							</a>
 							<br /><br />
 							<p>Won Collaborative Data Award in 2014 doing work for the Mass. D.O.T. and MAPC in the "37 Billion Mile Data Challenge". Contributed the Boston Car Data Explorer interactive data visualization tool (1920x1080 version) using D3.js, crossfilter, dc.js. Our submission was the MassVehicleExplorer.</p>
@@ -81,12 +81,9 @@
 			.append("a")
 			.attr("href", function(d) { return d.image_url; })
 			.append("img")
-			.attr("class", "img-responsive my_pullleft")
+			.attr("class", "img-responsive")
 			.attr("src", function(d) { return d.thumbnail_url; })
 			.attr("alt", function(d) { return d.title; });
-		panelbody
-			.append("br")
-			.attr("class", "hidden-xs ");
 		panelbody
 			.append("p")
 			.attr("class", "indent")

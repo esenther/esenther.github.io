@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Alan Esenther - Projects</title>
+  <!-- Pre-load jquery and D3 to process projects.txt data -->
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="js/jquery-1.11.1.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
+
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <script>
+  	var projectdivs;
+  	var list_by_languages = {};
+  	var all_languages;
+  	function reorder() {
+  		projectdivs = d3.selectAll("div.projectcol");
+  		d3.selectAll("div.clearfix").remove();
+  		d3.selectAll("span.clearfix").remove();
+  		projectdivs = projectdivs.remove();
+  		
+  		all_languages = "C#,VB.NET,Java,MATLAB,C,Python,Flash,ActionScript,JavaScript,SQL,Visual Basic 6".split(",");
+  		all_languages.forEach(function(lang) {
+  			list_by_languages[lang] = []; 
+  		});
+		projectdivs.each(function(d,i) {
+			var projectdiv_context = this;
+			project_languages = d.languages.split(",");
+			project_languages.forEach(function(proj_lang) {
+				all_languages.forEach(function(lang) {
+					if (proj_lang == lang) list_by_languages[lang].push(projectdiv_context);
+				});
+			});
+		});
+		var all = $("div#allcols");
+		d3.select("div#allcols").append("div").attr("class", "row").append("h2").text("C");
+		d3.select(list_by_languages["C"]).each(function(d, i) {
+			// Note that .appendToNode is called on a D3 selection, 
+			// but within the appendToNode() code the DOM node associated 
+			// with the d3 selection is appended to a DOM node ("all") (not to a d3 selection).
+			// Also, you have to wrap "this" in d3.select(this) for it to work.
+			d3.select(this).appendToNode(all);
+		});
+		
+  	}
+
+  	d3.selection.prototype.appendToNode = function(par) { 
+    return this.each(function() { 
+        par.append(this); 
+    }); 
+};
+  </script>
+
+</head>
+<body>
+    <div class="container">
+		<div class="page-header">
+			<h3>Alan Esenther - Projects <small>Example data visualization, UX, research, GUI, database, and software engineering projects</small></h3>
+		</div>	
+
+		<div class="row">
+			<button class="btn btn-primary" onclick="reorder()">Re-order</button>
+		</div>
+
+	<script>
+	d3.tsv("portfolio.tsv", function(error, data) {
+		data.forEach(function(d) {
+			d.thumbnail_url = d.image_url.substring(0,d.image_url.length-4) + "_thumbnail.png";
+			d.thumbnail_url = "project_images/thumbnails/" + d.thumbnail_url.substring(d.thumbnail_url.indexOf("\/")+1);
+			//console.log(d.thumbnail_url);
+		});
+
+		/*
+			<div id ="allcols" class="row panel panel-primary ">
+	            <div class="panel-body  projectcol col-md-3 col-sm-6 col-xs-12">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+						  <h2 class="panel-title">Boston Car Data Explorer</h2>
+						</div>
+						<div class="panel-body">
+							<a href="project_images/MassVehicleExplorer_screenshot.png">
+								<img src="project_images/thumbnails/MassVehicleExplorer_screenshot_thumbnail.png" alt="Boston Car Data Explorer">
+							</a>
+							<br /><br />
+							<p>Won Collaborative Data Award in 2014 doing work for the Mass. D.O.T. and MAPC in the "37 Billion Mile Data Challenge". Contributed the Boston Car Data Explorer interactive data visualization tool (1920x1080 version) using D3.js, crossfilter, dc.js. Our submission was the MassVehicleExplorer.</p>
+						</div>
+					</div>
+				</div> <!-- panel-body -->
+				...
+			</div>
+		*/
+
+		var diventer = d3.select("body").select("div.container")
+			.append('div')
+			.attr("id", "allcols")
+			.attr("class", "row panel panel-primary")
+			.selectAll("div")
+			.data(data)
+			.enter()					
+			.append('div')
+			.attr("class", "panel-body  projectcol col-md-3 col-sm-6 col-xs-12")
+			.attr("id", function(d) { return d.id; })
+			.append("div")
+			.attr("class", "panel panel-primary");
+
+		diventer
+			.append("div")
+			.attr("class", "panel-heading")
+			.append("h2")
+			.attr("class", "panel-title")
+			.text(function(d) { return d.title; });
+
+		panelbody = diventer
+			.append("div")
+			.attr("class", "panel-body");
+
+		panelbody
+			.append("div")
+			.append("a")
+			.attr("href", function(d) { return d.image_url; })
+			.append("img")
+			.attr("class", "img-responsive")
+			.attr("src", function(d) { return d.thumbnail_url; })
+			.attr("alt", function(d) { return d.title; });
+		panelbody
+			.append("br")
+		panelbody
+			.append("p")
+			.attr("class", "indent")
+			.html(function (d) { return d.description; });				
+	});
+
+	$(document).ready(function() { /* wait til content is stable to inject fixes */
+		setTimeout('setClearfixes()', 500);
+	});
+
+	function setClearfixes() { /* nb: use nth-of-type, not nth-child. And make one a span so as not to confuse jQuery. */
+		$('div.projectcol:nth-of-type(4n)').after('<span class="clearfix hidden-xs hidden-sm "></span>');
+		$('div.projectcol:nth-of-type(2n)').after('<div  class="clearfix hidden-xs hidden-md hidden-lg "></div>');
+	}
+	
+	</script>  
+        
+    </div>  <!-- end class="container" -->
+  
+    <script src="js/bootstrap.js"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Alan Esenther - Projects</title>
+  <!-- Pre-load jquery and D3 to process projects.txt data -->
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="js/jquery-1.11.1.min.js"></script>
+  <!--<link rel="stylesheet" type="text/css" href="css/styles.css">-->
+
+  <style>
+  	body {font-family: "Arial" };
+  </style>
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+</head>
+<body>
+	<div class="page-header">
+		<h2>Alan Esenther - Projects</h2>
+		<h3>Example data visualization, UX, research, GUI, database, and software engineering projects</h3>
+	</div>	
+
+
+	<script>
+	var itemWidth = 315;
+	var itemHeight = 200;
+	var imageHeight = 150;
+
+	d3.tsv("portfolio.tsv", function(error, data) {
+		data.forEach(function(d,i) {
+			d.thumbnail_url = d.image_url.substring(0,d.image_url.length-4) + "_thumbnail.png";
+			d.thumbnail_url = "project_images/thumbnails/" + d.thumbnail_url.substring(d.thumbnail_url.indexOf("\/")+1);
+			d.i = i;
+			console.log(d.thumbnail_url);
+		});
+
+		var svg = d3.select("body")
+			.append("svg")
+			.attr("width", 29*(itemWidth+15))
+			.attr("height", itemHeight+10);
+		
+		var g = svg
+			.selectAll("g")
+			.data(data)
+			.enter()					
+			.append('g')
+			.attr("transform", function (d,i) { return "translate("+(i*(itemWidth+15))+",0)"; });
+/*
+	<svg width="500" height="500">
+		<g transform="translate(100,100)">
+			<rect  x="2" y="2" width="210" height="310" rx="5" ry="5"
+	  			style="stroke:blue;stroke-width:2;fill:white" >
+	  		</rect>
+	  		<text x="7" y="30" width="200" height="300" font-family="Verdana" font-size="16" >Boston Car Data Explorer</text>
+	  		<image width="200" height="150" x="7" y="35" xlink:href="project_images/thumbnails/ArcGISplugin_thumbnail.png" />
+	  		<text x="7" y="300" width="200" height="300" font-family="Verdana" font-size="12" >Won Collaborative Data Award in 2014 doing work for the Mass. D.O.T. and MAPC in the ...</text>
+		</g>
+	</svg>
+*/
+		g
+			.append("rect")
+			.attr("width", itemWidth+10)
+			.attr("height", itemHeight)
+			.attr("x", 2)
+			.attr("y", 2)
+			.attr("rx", 5)
+			.attr("ry", 5)
+			.attr("style", "stroke:blue;stroke-width:2;fill:white");
+		
+		g
+			.append("text")
+			.attr("x", 7)
+			.attr("y", 25)
+			.attr("font-family", "Verdana")
+			.attr("font-size", 14)
+			.attr("style", "stroke:blue")
+			.text(function (d) { return d.title; });
+
+		g
+			.append("image")
+			.attr("x", 7)
+			.attr("y", 35)
+			.attr("width", itemWidth)
+			.attr("height", imageHeight)
+			.attr("xlink:href", function(d) { return d.thumbnail_url; });
+
+	});
+	
+	</script>  
+</body>
+</html>

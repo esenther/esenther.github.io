@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Alan Esenther - Projects by Programming Language</title>
+  <!-- Pre-load jquery and D3 to process projects.txt data -->
+  <script type="text/javascript" src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+
+  <style>
+  	body { font-family: "Arial" };
+  </style>
+
+  <script>
+  function doResize() {
+  	return;
+	var w = window.innerWidth-30;
+	var h = window.innerHeight-100;  
+	svg
+		.attr("width", w)
+		.attr("height", h);
+	force.size([w,h]);
+	$("rect#boundingRect").attr("width", w).attr("height", h)
+  }
+  </script>
+</head>
+<body onresize="doResize()">
+	<div class="page-header">
+		<div style="font-size:14; font-weight:bold">Alan Esenther - Projects by Language</div><br/>
+		<div style="font-size:9">Example data visualization, UX, research, GUI, database, and software engineering projects</div>
+	</div>	
+
+
+	<script>
+	var itemWidth = 350;
+	var itemHeight = 200;
+	var imageHeight = 150;
+
+  	var w = 1000;
+  	var h = 500;
+  	//var w = window.innerWidth-30;
+	//var h = window.innerHeight-100;
+
+  	var force = d3.layout.force()
+					.size([w, h])
+					.linkDistance(function (d) { //([100])
+						if (!(d.source.hasOwnProperty("lang") && d.target.hasOwnProperty("lang"))) return 100;
+						else return 500;
+					})
+					.linkStrength(function (d) {
+						//console.log(d);
+						if (!(d.source.hasOwnProperty("lang") && d.target.hasOwnProperty("lang"))) return 0.8;
+						else return 0.1;
+					})
+					.charge([-500])
+					.gravity(0.3)           
+					;
+
+	var svg = d3.select("body")
+		.append("svg")
+		.attr("width", w) //29*(itemWidth+15))
+		.attr("height", h) // itemHeight+10);
+
+	if (false)
+	svg
+		.append("rect")
+		.attr("id", "boundingRect")
+		.attr("x", 0).attr("y", 0).attr("width", w).attr("height", h)
+		.attr("style", "stroke:blue;stroke-width:2;fill:white")
+		;
+  	
+	var all_languages = "C#,VB.NET,Java,MATLAB,C,Python,Flash,ActionScript,JavaScript,SQL,Visual Basic 6".split(",");
+	var list_by_languages = [];
+	all_languages.forEach(function(lang) {
+		list_by_languages.push( { "lang": lang } );
+	});
+
+	// Create ref for root node, for edges to connect to:
+	var root_node =  { "lang" : "ALL_LANGUAGES" };
+
+	var edges = [];
+	var nodes = [];
+	nodes.push(root_node);
+
+	
+	d3.select("svg").selectAll("g.language")
+			.data(list_by_languages)
+			.enter()
+			.append("g")
+			.attr("class", "language")
+			.attr("lang", function (d) { 
+				//edges.push( { source: root_node, target: d });
+				nodes.push( d );
+				return d.lang; 
+			})
+			.call(force.drag)
+			.append("text")		
+			.attr("font-family", "Verdana")
+			.attr("font-size", 14)
+			.attr("style", "stroke:blue")
+			.text(function (d) { return d.lang; })
+			// Don't specify "x" or "y" or (for <g>) "transform" -- let the force simulator do that
+			//.attr("x", function (d,i) { console.log(i*100, d); return i*100; })
+			//.attr("y", function (d,i) { return 100; })
+			//.attr("transform", function (d,i) { return "translate("+(i*75)+",100)"; })
+			;
+
+/*
+		projectdivs.each(function(d,i) {
+			var projectdiv_context = this;
+			project_languages = d.languages.split(",");
+			project_languages.forEach(function(proj_lang) {
+				all_languages.forEach(function(lang) {
+					if (proj_lang == lang) list_by_languages[lang].push(projectdiv_context);
+				});
+			});
+		});
+		var all = $("div#allcols");
+		d3.select("div#allcols").append("div").attr("class", "row").append("h2").text("C");
+		d3.select(list_by_languages["C"]).each(function(d, i) {
+			// Note that .appendToNode is called on a D3 selection, 
+			// but within the appendToNode() code the DOM node associated 
+			// with the d3 selection is appended to a DOM node ("all") (not to a d3 selection).
+			// Also, you have to wrap "this" in d3.select(this) for it to work.
+			d3.select(this).appendToNode(all);
+		});	
+*/
+
+	d3.tsv("portfolio.tsv", function(error, nodedata) {
+		nodedata.forEach(function(d,i) {
+			d.thumbnail_url = d.image_url.substring(0,d.image_url.length-4) + "_thumbnail.png";
+			d.thumbnail_url = "project_images/thumbnails/" + d.thumbnail_url.substring(d.thumbnail_url.indexOf("\/")+1);
+		});
+		
+		var g = svg 
+			.selectAll("g.project")
+			.data(nodedata)
+			.enter()					
+			.append('g')
+			.attr("class", "project")
+			// Don't transform it here -- it would override what force computes:
+			//.attr("transform", function (d,i) { return "translate("+(i*(itemWidth+15))+",0)  scale(1.0)"; })
+			.attr("project", function (d) { 
+				// TODO: Push an edge for each project it's in...
+				//edges.push( { source: root_node, target: d });
+
+				project_languages = d.languages.split(",");
+				project_languages.forEach(function(proj_lang) {
+					// Find the language node for proj_lang
+					list_by_languages.forEach(function(l) {
+						if (proj_lang == l.lang) 
+							// create an edge from the language node to this project
+							edges.push( { source: l, target: d });
+					});
+				});
+
+				nodes.push( d );
+				return d.title; 
+			})
+			.call(force.drag)
+			;
+
+/*
+	<svg width="500" height="500">
+		<g transform="translate(100,100)">
+			<rect  x="2" y="2" width="210" height="310" rx="5" ry="5"
+	  			style="stroke:blue;stroke-width:2;fill:white" >
+	  		</rect>
+	  		<text x="7" y="30" width="200" height="300" font-family="Verdana" font-size="16" >Boston Car Data Explorer</text>
+	  		<image width="200" height="150" x="7" y="35" xlink:href="project_images/thumbnails/ArcGISplugin_thumbnail.png" />
+	  		<text x="7" y="300" width="200" height="300" font-family="Verdana" font-size="12" >Won Collaborative Data Award in 2014 doing work for the Mass. D.O.T. and MAPC in the ...</text>
+		</g>
+	</svg>
+*/
+		g
+			.append("rect")
+			.attr("width", itemWidth+10)
+			.attr("height", itemHeight)
+			.attr("x", 2)
+			.attr("y", 2)
+			.attr("rx", 30) // rounded rect radius
+			.attr("ry", 30)
+			.attr("style", "stroke:blue;stroke-width:2;fill:lightyellow")
+			;
+		
+		g
+			.append("text")
+			.attr("x", 7 +20) // add a bit so that we can increase rounded rect radius
+			.attr("y", 25)
+			.attr("font-family", "Verdana")
+			.attr("font-size", 14)
+			.attr("style", "stroke:blue")
+			.text(function (d) { return d.title; });
+
+		g
+			.append("image")
+			.attr("x", 7)
+			.attr("y", 35)
+			.attr("width", itemWidth)
+			.attr("height", imageHeight)
+			.attr("xlink:href", function(d) { return d.thumbnail_url; });
+
+		var edges_lines = svg.selectAll("line")
+			.data(edges)
+			.enter()
+			.append("line")
+			.attr("class", "edge")
+			.style("stroke", "#ccc")
+			.style("stroke-width", 1);
+
+
+		// Draw root node last, so that it's on top
+		if (false)
+		d3.select("svg").selectAll("g.root")
+				.data( [ root_node ])
+				.enter()
+				.append("g")
+				.attr("class", "root")
+				.attr("lang", function (d) { 
+					//nodes.push( d );
+					return d.lang; 
+				})
+				.call(force.drag)
+				.append("circle")
+				.attr("r", 5)
+				.attr("fill", "skyblue")
+				.attr("style", "stroke:blue")			
+				;			
+
+
+		force.links(edges);
+		force.nodes(nodes);
+
+		force.start();			
+	});
+
+
+	force.on("tick", function() {
+		d3.selectAll("g.root")
+			.attr("transform", function(d) { return "translate("+d.x+","+d.y+")" } );
+
+		d3.selectAll("g.language")
+			.attr("transform", function(d) { return "translate("+d.x+","+d.y+")" } ); // d.x and d.y have been updated by the force simulation
+
+		d3.selectAll("g.project")
+			.attr("transform", function(d) { return "translate("+d.x+","+d.y+") scale(0.1)" } );
+
+		d3.selectAll("line.edge")
+			.attr("x1", function(d) { return d.source.x; })
+			.attr("y1", function(d) { return d.source.y; })
+			.attr("x2", function(d) { return d.target.x; })
+			.attr("y2", function(d) { return d.target.y; });
+	});
+	</script>  
+</body>
+</html>

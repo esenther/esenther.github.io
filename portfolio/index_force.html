@@ -61,8 +61,8 @@
 
 	var svg = d3.select("body")
 		.append("svg")
-		.attr("width", w) //29*(itemWidth+15))
-		.attr("height", h) // itemHeight+10);
+		.attr("width", w)
+		.attr("height", h)
 
 	if (false)
 	svg
@@ -72,7 +72,7 @@
 		.attr("style", "stroke:blue;stroke-width:2;fill:white")
 		;
   	
-	var all_languages = "C#,VB.NET,Java,MATLAB,C,Python,Flash,ActionScript,JavaScript,SQL,Visual Basic 6".split(",");
+	var all_languages = "C#,VB.NET,Java,MATLAB,C/C++,Python,Flash/ActionScript,JavaScript,SQL,Visual Basic 6".split(",");
 	var list_by_languages = [];
 	all_languages.forEach(function(lang) {
 		list_by_languages.push( { "lang": lang } );

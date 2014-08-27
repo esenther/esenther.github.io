@@ -1,3 +1,4 @@
+/* index.html */
 
 	.indent { 
 		margin-left: 10px; 
@@ -21,3 +22,19 @@
 		}
 	}  
 */	
+
+/* index_force.html */
+
+	body { 
+		font-family: "Arial" 
+	}
+
+	div.title {
+		font-size:14; 
+		font-weight:bold
+	}
+
+	div.details {
+		font-size:9
+	}
+

@@ -22,7 +22,7 @@
 			.attr('class', 'd3-tip')
 			.html(function(d) { 
 				str = '<div align="center"  style="background-color:lightyellow; border:2px solid red; border-radius:15px; padding:10px"><p style="color:red; font-weight:bold">'+d.title+'</p>' +
-						'<a href="index.html#proj'+d.id+'"><img width="200" src="'+d.thumbnail_url+'"/></a></div>';
+						'<a target="_blank" href="project_detail.html?'+d.id+'"><img width="200" src="'+d.thumbnail_url+'"/></a></div>';
 				return str;
 			})
 			//.direction('n')
@@ -122,7 +122,7 @@
 
 					
 					//d.scale = d.weight / 100.0 / 3.0;
-					d.scale = .1 + d.weight/1000.0;
+					d.scale = .065 + d.weight/1000.0;
 					//d.scale = 0.1;
 					//console.log(d.title + ": d.weight=" + d.weight + " d.scale=" + d.scale);
 

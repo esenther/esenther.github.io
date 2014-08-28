@@ -21,7 +21,7 @@
 <body>
     <div class="container">
 		<div class="page-header">
-			<h3>Alan Esenther - Projects <small>Example data visualization, UX, research, GUI, database, and software engineering projects <a href="index_force.html">[By language (CPU-heavy)]</a></small></h3>
+			<h3>Alan Esenther - Projects <small>Example data visualization, UX, research, GUI, database, and software engineering projects <a href="projects_by_language.html">[By language (CPU-heavy)]</a></small></h3>
 		</div>	
 
 
@@ -66,11 +66,6 @@
 			.attr("class", "panel panel-primary");	
 
 		diventer
-			.append("a")
-			.attr("name", function(d) { return "proj"+d.id; })
-			.attr("id", function(d) { return "proj"+d.id; });
-
-		diventer
 			.append("div")
 			.attr("class", "panel-heading")
 			.append("h2")
@@ -84,7 +79,7 @@
 		panelbody
 			.append("div")
 			.append("a")
-			.attr("href", function(d) { return d.image_url; })
+			.attr("href", function(d) { return "project_detail.html?"+d.id; } )
 			.append("img")
 			.attr("class", "img-responsive")
 			.attr("src", function(d) { return d.thumbnail_url; })

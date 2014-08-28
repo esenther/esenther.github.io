@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Alan Esenther - Projects</title>
+  <!-- Pre-load jquery and D3 to process projects.txt data -->
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="js/jquery-1.11.1.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
+
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+</head>
+<body>
+    <div class="container">
+		<div class="page-header">
+			<h3>Alan Esenther - Project Detail <small><a href="index.html">[All Projects]</a></small></h3>
+		</div>	    	
+
+	<script>
+	var projid = null;
+
+	process_project();
+
+	function process_project() {
+		try {
+			if (location.search.length < 2) {
+				alert("This page must be called with a project id # as the only query parameter (e.g. project_detail.html?15");
+					return;
+			}
+			projid = parseInt(location.search.substring(1));
+		} catch (ex) {
+			return;
+		}
+		if (projid == null) return;
+		d3.tsv("portfolio.tsv", function(error, data) {
+			var dataset = [];
+			data.forEach(function(d) {
+				if (d.id == projid) {
+					d.thumbnail_url = d.image_url.substring(0,d.image_url.length-4) + "_thumbnail.png";
+					d.thumbnail_url = "project_images/thumbnails/" + d.thumbnail_url.substring(d.thumbnail_url.indexOf("\/")+1);
+					dataset.push(d);
+				}
+			});
+
+			/*
+				<div class="container">
+					<div class="page-header">
+						<h3>Alan Esenther - Project Detail <small>Details for one project</small></h3>
+					</div>	
+					<div id ="allcols" class="row panel panel-primary ">
+			            <div class="panel-body  projectcol col-md-3 col-sm-6 col-xs-12">
+							<div class="panel panel-primary">
+								<div class="panel-heading">
+								  <h2 class="panel-title">Boston Car Data Explorer</h2>
+								</div>
+								<div class="panel-body">
+									<a href="project_images/MassVehicleExplorer_screenshot.png">
+										<img src="project_images/thumbnails/MassVehicleExplorer_screenshot_thumbnail.png" alt="Boston Car Data Explorer">
+									</a>
+									<br /><br />
+									<p>Won Collaborative Data Award in 2014 doing work for the Mass. D.O.T. and MAPC in the "37 Billion Mile Data Challenge". Contributed the Boston Car Data Explorer interactive data visualization tool (1920x1080 version) using D3.js, crossfilter, dc.js. Our submission was the MassVehicleExplorer.</p>
+								</div>
+							</div>
+						</div> <!-- panel-body -->
+					</div>
+				</div>
+			*/
+
+			var diventer = d3.select("body").select("div.container")
+				.append('div')
+				.attr("id", "allcols")
+				.attr("class", "row panel panel-primary")
+				.selectAll("div")
+				.data(dataset)
+				.enter()					
+				.append('div')
+				.attr("class", "panel-body  projectcol col-xs-12")			
+				.append("div")
+				.attr("class", "panel panel-primary");	
+
+			diventer
+				.append("a")
+				.attr("name", function(d) { return "proj"+d.id; })
+				.attr("id", function(d) { return "proj"+d.id; });
+
+			diventer
+				.append("div")
+				.attr("class", "panel-heading")
+				.append("h2")
+				.attr("class", "panel-title")
+				.text(function(d) { return d.title; });
+
+			panelbody = diventer
+				.append("div")
+				.attr("class", "panel-body");
+
+			panelbody
+				.append("p")
+				.attr("class", "indent")
+				.html(function (d) { return d.description; });	
+			panelbody
+				.append("hr")
+			panelbody
+				.append("div")
+				.append("img")
+				.attr("class", "img-responsive")
+				.attr("src", function(d) { return d.image_url; })
+				.attr("alt", function(d) { return d.title; });
+		});
+	}
+	</script>  
+        
+    </div>  <!-- end class="container" -->
+  
+    <script src="js/bootstrap.js"></script>
+</body>
+</html>

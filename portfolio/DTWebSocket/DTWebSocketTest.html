@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>DT WebSocket Test</title>
+</head>
+<body style="font-family:arial; font-size:small">
+	<h2 id="h2title">DT WebSocket Test</h2>
+	<form>
+		<label for="txtWsURL">Server:</label>
+		<input name="txtWsURL" type="text" width="200" value="ws://localhost:8089" id="txtWsURL" />
+		<input type="button" id="btnConnect" value="Connect" onclick='startWebSocket()' />
+
+		<input name="clientMessage" type="text" width="200" value="My message..." />
+		<input type="button" value="Send" id="btnSendMessage" disabled onclick='doSend(this.form.clientMessage.value);' />
+		<input type="button" value="Close Connection" id="btnCloseConnection" title="Close Connection" disabled onclick='stopWebSocket()' />	
+		<input type="checkbox" id="chkShowTouchData" name="chkShowTouchData" checked />
+		<label for="chkShowTouchData">Show Touch Data</label>
+		
+		<input type="radio" name="rdoPaintOrRipples" value="paint" id="rdoPaint" checked />
+		<label for="rdoPaint">Paint</label>
+		<input type="radio" name="rdoPaintOrRipples" value="ripples" id="rdoRipples" />		
+		<label for="rdoRipples">Ripples</label>
+
+		<input type="button" value="Clear Console" onclick='document.getElementById("console").innerHTML="";' />
+	</form>
+	<div style="min-height:75px; min-width:300px; border: 1px solid">
+		<div name="console" id="console" style="overflow-y:scroll; max-height:75px; font-family:arial; font-size:x-small" ></div> 
+	</div>
+
+<script src="webSocket.js" language="javascript" type="text/javascript"></script>
+<script src="d3.js" language="javascript" type="text/javascript"></script>
+<script src="drawings.js" language="javascript" type="text/javascript"></script>
+</body>
+</html>

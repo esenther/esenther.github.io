@@ -6,12 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Alan Esenther - Projects</title>
-  <!-- Pre-load jquery and D3 to process projects.txt data -->
+  <!-- Pre-load jquery and D3 to process portfolio.tsv data -->
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   <script src="js/jquery-1.11.1.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" media="all">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" media="all">
   <link rel="stylesheet" type="text/css" href="css/styles.css" media="all">
-  <!-- <link rel="stylesheet" type="text/css" href="bootstrap.min.css" media="print"> -->
 
   <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -34,7 +33,7 @@
 			//console.log(d.thumbnail_url);
 		});
 
-		/*
+		/* This is the structure we'll be generating:
 			<div id ="allcols" class="row panel panel-primary ">
 	            <div class="panel-body  projectcol col-md-3 col-sm-6 col-xs-12">
 					<div class="panel panel-primary">
@@ -106,6 +105,6 @@
         
     </div>  <!-- end class="container" -->
   
-    <script src="js/bootstrap.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -77,7 +77,7 @@
 
 		doResize(); // set width and height of svg, force, and bounding rect.
 	  	
-		var all_languages = "C#,VB.NET,Java,MATLAB,C/C++,Python,Flash/ActionScript,JavaScript,SQL,Visual Basic 6".split(",");
+		var all_languages = "C#,VB.NET,Java,MATLAB,C/C++,Python,Flash/ActionScript,JavaScript,SQL,Visual Basic 6,Tableau".split(",");
 		var list_by_languages = [];
 		all_languages.forEach(function(lang) {
 			list_by_languages.push( { "lang": lang } );

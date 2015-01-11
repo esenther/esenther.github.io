@@ -4,107 +4,101 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <title>Alan Esenther - Projects</title>
-  <!-- Pre-load jquery and D3 to process portfolio.tsv data -->
-  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-  <script src="js/jquery-1.11.1.min.js"></script>
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" media="all">
   <link rel="stylesheet" type="text/css" href="css/styles.css" media="all">
-
   <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
-
 </head>
 <body>
-    <div class="container">
+  <div class="container">
 		<div class="page-header">
 			<h3>Alan Esenther - Projects <small>Example data visualization, UX, research, GUI, database, and software engineering projects <br>[View <a href="projects_by_language.html">by programming language</a> (interactive)]</small></h3>
 		</div>	
 
-
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="js/jquery-1.11.1.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
 	<script>
-	d3.tsv("portfolio.tsv", function(error, data) {
-		data.forEach(function(d) {
-			d.thumbnail_url = d.image_url.substring(0,d.image_url.length-4) + "_thumbnail.png";
-			d.thumbnail_url = "project_images/thumbnails/" + d.thumbnail_url.substring(d.thumbnail_url.indexOf("\/")+1);
-			//console.log(d.thumbnail_url);
+		d3.tsv("portfolio.tsv", function(error, data) {
+			data.forEach(function(d) {
+				d.thumbnail_url = d.image_url.substring(0,d.image_url.length-4) + "_thumbnail.png";
+				d.thumbnail_url = "project_images/thumbnails/" + d.thumbnail_url.substring(d.thumbnail_url.indexOf("\/")+1);
+				//console.log(d.thumbnail_url);
+			});
+
+			/* This is the structure we'll be generating:
+				<div id="allcols" class="row panel panel-primary">
+					<div class="panel-body  projectcol col-md-3 col-sm-6 col-xs-12">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<h2 class="panel-title">Boston Car Data Explorer</h2>
+							</div>
+							<div class="panel-body">
+								<div>
+									<a href="project_detail.html?1">
+									<img class="img-responsive" src="project_images/thumbnails/MassVehicleExplorer_screenshot_thumbnail.png" alt="Boston Car Data Explorer"></a>
+								</div>
+								<br>
+								<p class="indent">Won Collaborative Data Award in 2014 doing work for ...</p>
+							</div>
+						</div>
+					</div> <!-- panel-body -->
+					...
+				</div>
+			*/
+
+			var diventer = d3.select("body").select("div.container")
+				.append('div')
+				.attr("id", "allcols")
+				.attr("class", "row panel panel-primary")
+				.selectAll("div")
+				.data(data)
+				.enter()					
+				.append('div')
+				.attr("class", "panel-body  projectcol col-md-3 col-sm-6 col-xs-12")			
+				.append("div")
+				.attr("class", "panel panel-primary");	
+
+			diventer
+				.append("div")
+				.attr("class", "panel-heading")
+				.append("h2")
+				.attr("class", "panel-title")
+				.text(function(d) { return d.title; });
+
+			panelbody = diventer
+				.append("div")
+				.attr("class", "panel-body");
+
+			panelbody
+				.append("div")
+				.append("a")
+				.attr("href", function(d) { return "project_detail.html?"+d.id; } )
+				.append("img")
+				.attr("class", "img-responsive")
+				.attr("src", function(d) { return d.thumbnail_url; })
+				.attr("alt", function(d) { return d.title; });
+			panelbody
+				.append("br")
+			panelbody
+				.append("p")
+				.attr("class", "indent")
+				.html(function (d) { return d.description; });				
 		});
 
-		/* This is the structure we'll be generating:
-			<div id ="allcols" class="row panel panel-primary ">
-	            <div class="panel-body  projectcol col-md-3 col-sm-6 col-xs-12">
-					<div class="panel panel-primary">
-						<div class="panel-heading">
-						  <h2 class="panel-title">Boston Car Data Explorer</h2>
-						</div>
-						<div class="panel-body">
-							<a href="project_images/MassVehicleExplorer_screenshot.png">
-								<img src="project_images/thumbnails/MassVehicleExplorer_screenshot_thumbnail.png" alt="Boston Car Data Explorer">
-							</a>
-							<br /><br />
-							<p>Won Collaborative Data Award in 2014 doing work for the Mass. D.O.T. and MAPC in the "37 Billion Mile Data Challenge". Contributed the Boston Car Data Explorer interactive data visualization tool (1920x1080 version) using D3.js, crossfilter, dc.js. Our submission was the MassVehicleExplorer.</p>
-						</div>
-					</div>
-				</div> <!-- panel-body -->
-				...
-			</div>
-		*/
+		$(document).ready(function() { /* wait until content is stable to inject minor formatting fixes */
+			setTimeout('setClearfixes()', 500);
+		});
 
-		var diventer = d3.select("body").select("div.container")
-			.append('div')
-			.attr("id", "allcols")
-			.attr("class", "row panel panel-primary")
-			.selectAll("div")
-			.data(data)
-			.enter()					
-			.append('div')
-			.attr("class", "panel-body  projectcol col-md-3 col-sm-6 col-xs-12")			
-			.append("div")
-			.attr("class", "panel panel-primary");	
-
-		diventer
-			.append("div")
-			.attr("class", "panel-heading")
-			.append("h2")
-			.attr("class", "panel-title")
-			.text(function(d) { return d.title; });
-
-		panelbody = diventer
-			.append("div")
-			.attr("class", "panel-body");
-
-		panelbody
-			.append("div")
-			.append("a")
-			.attr("href", function(d) { return "project_detail.html?"+d.id; } )
-			.append("img")
-			.attr("class", "img-responsive")
-			.attr("src", function(d) { return d.thumbnail_url; })
-			.attr("alt", function(d) { return d.title; });
-		panelbody
-			.append("br")
-		panelbody
-			.append("p")
-			.attr("class", "indent")
-			.html(function (d) { return d.description; });				
-	});
-
-	$(document).ready(function() { /* wait til content is stable to inject fixes */
-		setTimeout('setClearfixes()', 500);
-	});
-
-	function setClearfixes() { /* nb: use nth-of-type, not nth-child. And make one a span so as not to confuse jQuery. */
-		$('div.projectcol:nth-of-type(4n)').after('<span class="clearfix hidden-xs hidden-sm "></span>');
-		$('div.projectcol:nth-of-type(2n)').after('<div  class="clearfix hidden-xs hidden-md hidden-lg "></div>');
-	}
-	
+		function setClearfixes() { /* nb: use nth-of-type, not nth-child. And make one a span so as not to confuse jQuery. */
+			$('div.projectcol:nth-of-type(4n)').after('<span class="clearfix hidden-xs hidden-sm "></span>');
+			$('div.projectcol:nth-of-type(2n)').after('<div  class="clearfix hidden-xs hidden-md hidden-lg "></div>');
+		}
 	</script>  
         
-    </div>  <!-- end class="container" -->
-  
-    <script src="js/bootstrap.min.js"></script>
+  </div>  <!-- end class="container" -->
 </body>
 </html>

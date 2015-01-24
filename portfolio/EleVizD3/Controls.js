@@ -1,137 +1,88 @@
 // Init.js 
            
-var CAR_HEIGHT = 20;//15;
-var CAR_WIDTH = 13;//10;
+var CAR_HEIGHT = 20;
+var CAR_WIDTH = 13;
 var SHAFT_GAP = 30;
 var GAP_BELOW_FIRST_FLOOR = 5;            
-var csv_headers;
-var dataset = new Array();
-var liftPositionsArray;
-var scale;
+var liftPositions = [];
 var simulatePid;    
-var currentRow = 0;                    
+var currentRow = 0;   
+var myBuilding;                 
 
+// Note: s6 means shaft 6, c2 means car 2
 //timestamp,s1_c1_y,s1_c2_y,s2_c1_y,s2_c2_y,s3_c1_y,s3_c2_y,s4_c1_y,s4_c2_y,s5_c1_y,s5_c2_y,s6_c1_y,s6_c2_y
 //-1000,0,68,0,68,0,68,0,68,0,68,0,68
 //-999,0,68,0,68,0,68,0,68,0,68,0,68
 //-998,0,68,0,68,0,68,0,68,0,68,0,68
-//-997,0,68,0,68,0,68,0,68,0,68,0,68    
+//-997,0,68,0,68,0,68,0,68,0,68,0,68  
 
-var process_data_file = function() {
+$(document).ready(process_data_file()); // Loads .csv -- callback will initialize GUI  
+
+function process_data_file() {
     d3.text("height.csv", function(error, data) {
         if (error) {
             console.log(error);
-            alert("Error loading .csv data:" + error);
+            return;
         }
         lines = data.split("\n");
-        csv_headers = lines[0].split(",");
+        var csv_headers = lines[0].split(",");
         console.log("Found " + csv_headers.length + " csv_headers: " + csv_headers);
+        console.log("Found " + (lines.length-1) + " lines of data.");  
         for (var i=1; i<lines.length; i++) {
-            var lineArr = lines[i].split(",");
-            dataset.push(lineArr);    //-1000,0,68,0,68,0,68,0,68,0,68,0,68
-        }
-        console.log("Found " + dataset.length + " lines of data.");        
-                            
-        liftPositionsArray=new Array(dataset.length);
-        for (var i=0; i<dataset.length; i++) {
-            if (dataset[i].length>0) {
-                var rowdata = dataset[i];
-                timestamp=parseInt(rowdata[0]);
-                var liftHeights=new Array(rowdata.length-1);
-                for (var j=1; j<rowdata.length; j++) {
-                    liftHeights[j-1]=parseFloat(rowdata[j]);
-                }                        
-                liftPositionsArray[i] = { "timestamp": timestamp, "liftHeights": liftHeights };
-            }
+            var line = lines[i].split(","); // [-1000,0,68,0,68,0,68,0,68,0,68,0,68]
+            var timestamp = parseInt(line[0]);
+            var liftHeights = [];
+            for (var j=1; j<line.length; j++) {
+                liftHeights.push(parseFloat(line[j]));
+            }                        
+            liftPositions.push({ "timestamp": timestamp, "liftHeights": liftHeights });
         }   
-        console.log("Initial LiftPositions=" + liftPositionsArray[0]);
-        
-        // Now that the callback has finished processing .csv data, initialize the GUI controls
-        initGUI();
-        updateCars(liftPositionsArray[0].liftHeights);
+        console.log("Initial LiftPositions=" + liftPositions[0].liftHeights);
+        if (!initGUI()) return;
+        myBuilding.updateCars(liftPositions[0].liftHeights);
     });
 };
 
-function simulateContinuously() {
-    if ($("#img_play").attr("src").indexOf("play") > 0) {
-        return;
-    }
-    if (currentRow >= liftPositionsArray.length -1) {
-        currentRow = liftPositionsArray.length - 1;
-        $("#img_play").attr("src", "images/btn_play.png");
-        return false;
-    }    
-    if (simulateNext()) {
-        var stepIntervalMilleseconds = parseInt($("#upd_timeslicesBetweenUpdates").val());
-        simulatePid = setTimeout(simulateContinuously,stepIntervalMilleseconds);
-    }
-}
+function initGUI() {
+    // Check for errors in .csv file
 
-function simulateNext() {
-    try { 
-    currentRow += parseInt($("#upd_timeslicesBetweenUpdates").val());
-    if (currentRow >= liftPositionsArray.length) {
-        currentRow = liftPositionsArray.length - 1;
-        $("#img_play").attr("src", "images/btn_play.png");
-    }
-    $("#slider_timestep").val(currentRow);
-    $("#lbl_slider_timestep").text(pad(currentRow, slider_timestep.max.toString().length));
-    updateCars(liftPositionsArray[currentRow].liftHeights);
-    return true;
-    } catch (e) {
-        //alert("currentRow=" + currentRow+" e=" + e);
-    }
-}
-
-function simulatePrevious() {
-    //currentLiftPosIndex = currentLiftPosIndex - upd_timeslicesBetweenUpdates.value;
-    //if (currentLiftPosIndex < slider_timestep.minimum) currentLiftPosIndex = slider_timestep.minimum;
-    currentRow -= parseInt($("#upd_timeslicesBetweenUpdates").val());
-    if (currentRow < 0) {
-        currentRow = 0;
-    }
-    $("#slider_timestep").val(currentRow);
-    $("#lbl_slider_timestep").text(pad(currentRow, slider_timestep.max.toString().length));    
-    updateCars(liftPositionsArray[currentRow].liftHeights);
-}	
-
-var initGUI = function() {
-    if (liftPositionsArray[0]==null) {
+    if (liftPositions[0]==null) {
         console.log("ERROR: initGUI: no LiftPositions were found\n");
-        return;
+        return false;
     }
-    if (liftPositionsArray[0].liftHeights.length<1) {
-        console.log("ERROR: initGUI: liftPositionsArray[0] has no elevator car heights\n");
-        return;
+    if (liftPositions[0].liftHeights.length<1) {
+        console.log("ERROR: initGUI: liftPositions[0] has no elevator car heights\n");
+        return false;
     }
-    if (liftPositionsArray[0].liftHeights.length<2) {
-        console.log("ERROR: initGUI: liftPositionsArray[0] has only 1 elevator car height\n");
-        return;
+    if (liftPositions[0].liftHeights.length<2) {
+        console.log("ERROR: initGUI: liftPositions[0] has only 1 elevator car height\n");
+        return false;
     }
 
     // Initialize the GUI controls
     
-    // timeslices in input file are e.g. 100ms apart.
-    if (liftPositionsArray.length > 1) {
-        $("#upd_timeslice").val(100 * ((liftPositionsArray[1]).timestamp - (liftPositionsArray[0]).timestamp));
+    // Initialize the "Data frequency (ms)" field. Rows in input file are e.g. 100ms apart. 
+    if (liftPositions.length > 1) {
+        // Timestamps in data are in units of 100ms. 
+        $("#upd_timeslice").val(100 * ((liftPositions[1]).timestamp - (liftPositions[0]).timestamp));
         console.log("Detected " + $("#upd_timeslice").val()+"ms between data samples.");
     } else {
         $("#upd_timeslice").val(100);
     }
 
+    // initialize the time slider
     $("#slider_timestep").attr('min',0);
-    $("#slider_timestep").attr('max',liftPositionsArray.length-1);   
+    $("#slider_timestep").attr('max',liftPositions.length-1);   
     $("#slider_timestep").attr('step',parseInt(upd_timeslicesBetweenUpdates.value));
     $("#slider_timestep").val(0);
     $("#slider_timestep").change(function(){ 
         currentRow = parseInt(this.value);
-        updateCars(liftPositionsArray[currentRow].liftHeights);
+        myBuilding.updateCars(liftPositions[currentRow].liftHeights);
     });   
-	$("#slider_timestep").on("input", function(){ 
-        currentRow = parseInt(this.value);
-        updateCars(liftPositionsArray[currentRow].liftHeights);
-    }); 
 
+    // Add button click handlers
+
+    // For simplicity just use play/stop button image name (btn_stop.png or btn_play.png) to detect play state
     $("#img_play").click(function() {
         if ($("#img_play").attr('src').indexOf('play') > 0) {
             $("#img_play").attr('src', 'images/btn_stop.png');     
@@ -158,52 +109,100 @@ var initGUI = function() {
         simulatePrevious();
     });
 
-    numShafts = Math.floor(liftPositionsArray[0].liftHeights.length / 2);
-    numFloors = parseInt($("#upd_floors").val());
+    // Create the building object
 
-    var myBuilding = building()
-                        .numShafts(numShafts)
-                        .numFloors(numFloors)
-                        .carWidth(CAR_WIDTH).carHeight(CAR_HEIGHT)
-                        .shaftGap(SHAFT_GAP).gapBelowFirstFloor(GAP_BELOW_FIRST_FLOOR);
-    var floorData = new Array()
-    for (var i=0; i<numFloors; i++) {
-        floorData.push(i*CAR_HEIGHT);
-    };    
-    // Note: selection.call(myBuilding) is equivalent to myBuilding(selection)
-    // Note: selection.datum does not compute enter and exit selections.
-
-    d3.select("#buildingDiv").datum(floorData).call(myBuilding); 
-
-    scale = d3.scale.linear();
-    // Domain is the bottom of the lowest car to the bottom of highest car
-    // scale.domain([0, 68]); // Lowest and highest lift positions in the data
-    var min_liftHeight = d3.min(liftPositionsArray, function(d) {
+    var numShafts = Math.floor(liftPositions[0].liftHeights.length / 2); // 2 cars per shaft
+    var numFloors = parseInt($("#upd_floors").val());
+    // Compute highest and lowest lift positions possible
+    var min_liftHeight = d3.min(liftPositions, function(d) {
         // For each array of LiftPositions (at each timestamp), return min of those LiftPostions.
         return d3.min(d.liftHeights);
     });
-    var max_liftHeight = d3.max(liftPositionsArray, function(d) {
+    var max_liftHeight = d3.max(liftPositions, function(d) {
         // For each array of LiftPositions (at each timestamp), return max of those LiftPostions.
         return d3.max(d.liftHeights);
     });  
-    scale.domain([min_liftHeight, max_liftHeight]);
-    scale.range([CAR_HEIGHT, (numFloors) * CAR_HEIGHT ]); // range is the TOP of each extreme car              
-        
-    var buildingRect = d3.select("#building_group_rect");
-    console.log('building: x=' + buildingRect.attr("x")+' y=' + buildingRect.attr("y")+' width='+ buildingRect.attr("width") + ' height=' + buildingRect.attr("height"));
-    $("#slider_timestep").attr('style', 'width:'+buildingRect.attr('width')+'px');
-    
-    // Resize time slider label to fit its content -- or just hard-code to max
-    //$('#lbl_slider_timestep').attr('size', $('#lbl_slider_timestep').val().length);
-    var centeredLeft = ($("#slider_timestep").width() - $("#div_slider_controls").width())/2;
+
+    myBuilding = building()
+        .numShafts(numShafts)
+        .numFloors(numFloors)
+        .carWidth(CAR_WIDTH)
+        .carHeight(CAR_HEIGHT)
+        .shaftGap(SHAFT_GAP)
+        .gapBelowFirstFloor(GAP_BELOW_FIRST_FLOOR)
+        .min_liftHeight(min_liftHeight)
+        .max_liftHeight(max_liftHeight);
+
+    // Bind floor positions to building object
+    var floorData = [];
+    for (var i=0; i<numFloors; i++) {
+        floorData.push(i*CAR_HEIGHT);
+    };   
+    // Note: selection.datum does not compute enter and exit selections. 
+    // Note: selection.call(myBuilding) is equivalent to myBuilding(selection). Allows for easier chaining.
+    d3.select("#buildingDiv").datum(floorData).call(myBuilding); // Bind floor data, invoke myBuilding(selection)
+
+    console.log('building: width='+ myBuilding.buildingWidth() + ' height=' + myBuilding.buildingHeight());
+    $("#slider_timestep").attr('style', 'width:'+myBuilding.buildingWidth()+'px');
     
     // Center the time slider controls and label 
-    $("#div_slider_controls").attr("style","left:"+centeredLeft+"px");
+    var centeredLoc = ($("#slider_timestep").width() - $("#div_slider_controls").width())/2;
+    $("#div_slider_controls").attr("style","left:"+centeredLoc+"px");
     
     // Center the building under the controls panel
-    centeredLeft = ($("#controls").width() - buildingRect.attr("width")) / 2;
-    $("#building_with_slider").attr("style", "left:"+centeredLeft+"px");                
+    centeredLoc = ($("#controls").width() - myBuilding.buildingWidth()) / 2;
+    $("#building_with_slider").attr("style", "left:"+centeredLoc+"px");    
+
+    $("#slider_timestep").on("input", function() {
+        // Stop any current animation if user drags slider
+        $("#img_play").attr("src", "images/btn_play.png");
+        currentRow = Math.round(parseFloat(slider_timestep.value));
+        myBuilding.updateCars(liftPositions[currentRow].liftHeights);
+        ;
+    });     
+    return true;       
 }
+
+function simulateContinuously() {
+    // Stop the animation (by NOT calling setTimeout() again) if user clicked Stop button.
+    if ($("#img_play").attr("src").indexOf("play") > 0) {
+        return;
+    }
+    // Stop the animation if it has reached the end of the timesteps
+    if (currentRow >= liftPositions.length -1) {
+        currentRow = liftPositions.length - 1;
+        $("#img_play").attr("src", "images/btn_play.png");
+        return;
+    }    
+    simulateNext();
+    var stepIntervalMilleseconds = parseInt($("#upd_timeslicesBetweenUpdates").val());
+    simulatePid = setTimeout(simulateContinuously,stepIntervalMilleseconds);
+}
+
+function simulateNext() {
+    // currentLiftPosIndex = currentLiftPosIndex + upd_timeslicesBetweenUpdates.value;
+    // if (currentLiftPosIndex > slider_timestep.maximum) currentLiftPosIndex = slider_timestep.maximum;
+    currentRow += parseInt($("#upd_timeslicesBetweenUpdates").val());
+    if (currentRow >= liftPositions.length) {
+        currentRow = liftPositions.length - 1;
+        $("#img_play").attr("src", "images/btn_play.png");
+    }
+    $("#slider_timestep").val(currentRow);
+    $("#lbl_slider_timestep").text(pad(currentRow, slider_timestep.max.toString().length));
+    myBuilding.updateCars(liftPositions[currentRow].liftHeights);
+}
+
+function simulatePrevious() {
+    // currentLiftPosIndex = currentLiftPosIndex - upd_timeslicesBetweenUpdates.value;
+    // if (currentLiftPosIndex < slider_timestep.minimum) currentLiftPosIndex = slider_timestep.minimum;
+    currentRow -= parseInt($("#upd_timeslicesBetweenUpdates").val());
+    if (currentRow < 0) {
+        currentRow = 0;
+    }
+    $("#slider_timestep").val(currentRow);
+    $("#lbl_slider_timestep").text(pad(currentRow, slider_timestep.max.toString().length));    
+    myBuilding.updateCars(liftPositions[currentRow].liftHeights);
+}   
 
 function pad(num, size) {
     var s = num+"";

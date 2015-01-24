@@ -2,46 +2,11 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>EleViz</title>
-		<script type="text/javascript" src="lib/d3.v3.js"></script>
-        <script type="text/javascript" src="lib/jquery-2.1.0.min.js"></script>
-        
-        <script type="text/javascript" src="Controls.js"></script>
-        <script type="text/javascript" src="building.js"></script>
-        <script type="text/javascript" src="car.js"></script>
-        <script type="text/javascript" src="UpdateCars.js"></script>
-        
-		<style type="text/css">
-            body { background-color: steelblue }           
-            #buildingDiv { position:relative; }            
-            #building_with_slider { position:relative; }
-            td {text-align: right;  font-family: arial,"Times New Roman",Georgia,Serif; }
-            input[type="number"] { width: 50px;}
-            label { font-weight:bold; }
-            #div_slider_controls { position: relative }
-            #lbl_slider_timestep { 
-                position:relative;  
-                background-color: 
-                lightyellow; 
-                -moz-border-radius: 9px;
-                border-radius: 9px;
-                border-style: ridge;
-                font-family: arial,"Times New Roman",Georgia,Serif;
-                top: -7px;  }
-            #img_play{ width: 25px }
-            #img_stepback{ width: 25px }
-            #img_stepforward{ width: 25px }
-		</style>
-        
-		<script type="text/javascript">
-            $(document).ready(process_data_file()); // Loads .csv -- callback will initialize GUI
-		</script>        
+		<title>EleViz</title>       
+        <link href="styles.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>        
-        <form name="form1" id="form1"  
-            oninput="lbl_slider_timestep.innerText = pad(Math.round(parseFloat(slider_timestep.value)), slider_timestep.max.toString().length)" 
-            >
-            
+        <form name="form1" id="form1">
             <table id="controls" >
                 <tr>
                     <td><label for="upd_timeslice" id="lbl_upd_timeslice" >Data frequency (ms):</label></td>
@@ -58,7 +23,7 @@
                     <td><input type="number" id="upd_timeslicesBetweenUpdates" min="0" max="100" step="10" value="10" title = "Milliseconds between screen updates" /></td>
                     <td> </td>
                     <td><label for="upd_floors" id="lbl_floors" >Floors:</label></td>
-                    <td><input type="number" id="upd_floors" disabled min="0" max="100" step="1" value="18" title="Set this to match the number of floors in the data that has been loaded." /></td>
+                    <td><input type="number" id="upd_floors" min="0" max="100" step="1" value="18" title="Set this to match the number of floors in the data that has been loaded." /></td>
                 </tr>
             </table>
             <hr />
@@ -78,5 +43,10 @@
                 </div> 
             </div>
         </form>
+        <script type="text/javascript" src="lib/d3.v3.js"></script>
+        <script type="text/javascript" src="lib/jquery-2.1.0.min.js"></script>
+        <script type="text/javascript" src="controls.js"></script>
+        <script type="text/javascript" src="building.js"></script>
+        <script type="text/javascript" src="car.js"></script>
 	</body>
 </html>

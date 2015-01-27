@@ -1,4 +1,4 @@
-// Init.js 
+// simulator.js 
            
 var CAR_HEIGHT = 20;
 var CAR_WIDTH = 13;
@@ -9,7 +9,7 @@ var simulatePid;
 var currentRow = 0;   
 var myBuilding;                 
 
-// Note: s6 means shaft 6, c2 means car 2
+// Note: In the data file, s6 means shaft 6, c2 means car 2
 //timestamp,s1_c1_y,s1_c2_y,s2_c1_y,s2_c2_y,s3_c1_y,s3_c2_y,s4_c1_y,s4_c2_y,s5_c1_y,s5_c2_y,s6_c1_y,s6_c2_y
 //-1000,0,68,0,68,0,68,0,68,0,68,0,68
 //-999,0,68,0,68,0,68,0,68,0,68,0,68
@@ -38,26 +38,12 @@ function process_data_file() {
             liftPositions.push({ "timestamp": timestamp, "liftHeights": liftHeights });
         }   
         console.log("Initial LiftPositions=" + liftPositions[0].liftHeights);
-        if (!initGUI()) return;
+        initGUI();
         myBuilding.updateCars(liftPositions[0].liftHeights);
     });
 };
 
 function initGUI() {
-    // Check for errors in .csv file
-
-    if (liftPositions[0]==null) {
-        console.log("ERROR: initGUI: no LiftPositions were found\n");
-        return false;
-    }
-    if (liftPositions[0].liftHeights.length<1) {
-        console.log("ERROR: initGUI: liftPositions[0] has no elevator car heights\n");
-        return false;
-    }
-    if (liftPositions[0].liftHeights.length<2) {
-        console.log("ERROR: initGUI: liftPositions[0] has only 1 elevator car height\n");
-        return false;
-    }
 
     // Initialize the GUI controls
     
@@ -79,6 +65,7 @@ function initGUI() {
         currentRow = parseInt(this.value);
         myBuilding.updateCars(liftPositions[currentRow].liftHeights);
     });   
+
 
     // Add button click handlers
 
@@ -108,6 +95,7 @@ function initGUI() {
         }   
         simulatePrevious();
     });
+
 
     // Create the building object
 
@@ -143,8 +131,14 @@ function initGUI() {
     d3.select("#buildingDiv").datum(floorData).call(myBuilding); // Bind floor data, invoke myBuilding(selection)
 
     console.log('building: width='+ myBuilding.buildingWidth() + ' height=' + myBuilding.buildingHeight());
-    $("#slider_timestep").attr('style', 'width:'+myBuilding.buildingWidth()+'px');
+
     
+
+    // Adjust HTML element layout based on generated building dimensions
+
+    // Extend time slider to width of the generated building
+    $("#slider_timestep").attr('style', 'width:'+myBuilding.buildingWidth()+'px');
+
     // Center the time slider controls and label 
     var centeredLoc = ($("#slider_timestep").width() - $("#div_slider_controls").width())/2;
     $("#div_slider_controls").attr("style","left:"+centeredLoc+"px");
@@ -158,9 +152,8 @@ function initGUI() {
         $("#img_play").attr("src", "images/btn_play.png");
         currentRow = Math.round(parseFloat(slider_timestep.value));
         myBuilding.updateCars(liftPositions[currentRow].liftHeights);
-        ;
-    });     
-    return true;       
+        $("#lbl_slider_timestep").text(pad(currentRow, slider_timestep.max.toString().length)); 
+    });         
 }
 
 function simulateContinuously() {

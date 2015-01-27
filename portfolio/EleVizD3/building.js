@@ -9,31 +9,26 @@ function building() {
     var carsArray = [];
     var scale = d3.scale.linear();
 
-    // building(selection) is called after setting the building parameters
-    function buildingClosure(selection) {  //# selection (this) is #buildingDiv
+    function buildingClosure(selection) { 
         building_width = (numShafts * carWidth) + (numShafts+1) * shaftGap;
         building_height = (numFloors * carHeight) + gapBelowFirstFloor;   
 
         // scale maps liftPosition in data to pixel position on screen
-        scale.domain([min_liftHeight, max_liftHeight]);
-        scale.range([CAR_HEIGHT, (numFloors) * CAR_HEIGHT ]);   
+        scale.domain([min_liftHeight, max_liftHeight]); 
+        scale.range([carHeight, (numFloors) * carHeight ]); 
 
-        selection.each(function(floorData) {   
-            // This selection.each() currently has only one selection. In the future, there could be multiple views.
+// Create:
+// <svg width="<building_width>" height="<building_height>" >
+//      <g id="building_group" >
+//          <!-- building outline with white fill -->
+//              <rect id="building_group_rect" x="0" y="0" width="<building_width>" height="<building_height>" fill="white" stroke-width="1" stroke="black" >
+//          <!-- Draw one line for each floor -->
+//              <line x1="0" x2="<building_width>" y1="..." y2="..." stroke="gray" stroke-width="0.5" >
+//              <line>... <-- additional floors
+//      <g id="cars_group" >  <-- cars will be drawn in here as a series of as <rect> (car body) and <line> (car door) elements.
 
-            //scale.domain([0, 68]); // This is bottom of lowest car to bottom of highest car, therefore, CAR_HEIGHT * (numFloors-1)
-            //scale.range([CAR_HEIGHT, CAR_HEIGHT+ (numFloors-1) * CAR_HEIGHT ]); // range is the TOP of each extreme car
-            
-            // Create:
-            // <svg width="<building_width>" height="<building_height>" >
-            //      <g id="building_group" >
-            //          <!-- building outline with white fill -->
-            //              <rect id="building_group_rect" x="0" y="0" width="<building_width>" height="<building_height>" fill="white" stroke-width="1" stroke="black" >
-            //          <!-- Draw one line for each floor -->
-            //              <line x1="0" x2="<building_width>" y1="..." y2="..." stroke="gray" stroke-width="0.5" >
-            //              <line>... <-- additional floors
-            //      <g id="cars_group" >  <-- elevator cars will be drawn in here as a series of as <rect> (car body) and <line> (car door) elements.
-            
+        selection.each(function(floorData) { // bound data is accessible as "floorData"
+
             // Draw the building outline as a rect with white fill color
             var svg = d3.select(this).append("svg")
                 .attr("width", building_width)
@@ -60,10 +55,10 @@ function building() {
                 .attr("x2", building_width)
                 .attr("y1",  function(d, i) {
                     // Within callback, "this" is a SVGLineElement element (no longer #buildingDiv)
-                    return building_height-(i*CAR_HEIGHT)-GAP_BELOW_FIRST_FLOOR;
+                    return building_height-(i*carHeight)-gapBelowFirstFloor;
                 })                    
                 .attr("y2",  function(d, i) {
-                    return building_height-(i*CAR_HEIGHT)-GAP_BELOW_FIRST_FLOOR;
+                    return building_height-(i*carHeight)-gapBelowFirstFloor;
                 })
                 .attr("stroke", "gray")    
                 .attr("stroke-width", 0.5)
@@ -163,53 +158,59 @@ function building() {
                 carsArray[i].currentHeight(liftHeights[i]);
             }
         }
-        
-        var databound_car_g = d3.select("#cars_group")
-            .selectAll("g")
+
+        // Creating this:
+        //   <g id="cars_group">
+        //     <g class="car_g">
+        //       <rect ...>        // draw car
+        //       <line ...>        // draw door line on car
+        //     <g class="car_g">
+        //       <rect ...>        // draw car
+        //       <line ...>        // draw door line on car
+        //     ... 12 car_g in all ...
+        //   </g>
+
+        var car_g_enter = d3.select("#cars_group")
+            .selectAll("g.car_g")
             .data(carsArray) //12 cars   
             .enter()
-            .append("g");
+            .append("g")
+            .attr("class", "car_g");
 
         // enter...
 
         // draw car rects
-        databound_car_g
+        car_g_enter
             .append("rect")
             .attr("x", function(d, i) {                        
-                return SHAFT_GAP + (d.shaftNum())*(CAR_WIDTH + SHAFT_GAP); // 2 cars per shaft                                        
+                return shaftGap + (d.shaftNum())*(carWidth + shaftGap); // 2 cars per shaft                                        
             })
             .attr("y", function(d, i) {
-                return CAR_HEIGHT+ (myBuilding.numFloors()-1) * CAR_HEIGHT - scale(d.currentHeight());
+                return carHeight+ (myBuilding.numFloors()-1) * carHeight - scale(d.currentHeight());
             })
-            .attr("width", CAR_WIDTH)
-            .attr("height", CAR_HEIGHT)
+            .attr("width", carWidth)
+            .attr("height", carHeight)
             .attr("fill", function(d, i) {
                 return d.isUpper() ? "blue" : "red";
             })
-            /*
-            .on("mouseover", function() {
-                d3.select(this).attr("fill", "pink");
-            })
-            .on("mouseout", function() {
-                d3.select(this).attr("fill", "green");
-            })
-            */
+            //.on("mouseover", function() { d3.select(this).attr("fill", "pink"); })
+            //.on("mouseout", function() { d3.select(this).attr("fill", "green"); })
             ;
      
-        // draw lines on doors
-        databound_car_g
+        // draw door lines on top of cars
+        car_g_enter
             .append("line")                   
             .attr("x1", function(d, i) {                        
-                return CAR_WIDTH/2 + SHAFT_GAP + (d.shaftNum())*(CAR_WIDTH + SHAFT_GAP);                                    
+                return carWidth/2 + shaftGap + (d.shaftNum())*(carWidth + shaftGap);                                    
             })
             .attr("x2", function(d, i) {                        
-                return CAR_WIDTH/2 + SHAFT_GAP + (d.shaftNum())*(CAR_WIDTH + SHAFT_GAP);                                  
+                return carWidth/2 + shaftGap + (d.shaftNum())*(carWidth + shaftGap);                                  
             })                    
             .attr("y1", function(d, i) {
-                return CAR_HEIGHT+ (myBuilding.numFloors()-1) * CAR_HEIGHT - scale(d.currentHeight());
+                return carHeight+ (myBuilding.numFloors()-1) * carHeight - scale(d.currentHeight());
             })
             .attr("y2", function(d, i) {
-                return CAR_HEIGHT + CAR_HEIGHT+ (myBuilding.numFloors()-1) * CAR_HEIGHT - scale(d.currentHeight());
+                return carHeight + carHeight+ (myBuilding.numFloors()-1) * carHeight - scale(d.currentHeight());
             })
             .attr("stroke", "black")
             .attr("stroke-width", 1); 
@@ -217,25 +218,24 @@ function building() {
 
         // update...
 
-        var databound_car_g_update = d3.select("#cars_group")
-            .selectAll("g")
-            .data(carsArray);
+        var car_g_update = d3.select("#cars_group")
+            .selectAll("g.car_g");
 
         // move car rects
-        databound_car_g_update
+        car_g_update
             .selectAll("rect")
             .attr("y", function(d, i) {
-                return CAR_HEIGHT+ (myBuilding.numFloors()-1) * CAR_HEIGHT - scale(d.currentHeight());
+                return carHeight+ (myBuilding.numFloors()-1) * carHeight - scale(d.currentHeight());
             });   
 
         // move lines on doors
-        databound_car_g_update
+        car_g_update
             .selectAll("line")
             .attr("y1", function(d, i) {
-                return CAR_HEIGHT+ (myBuilding.numFloors()-1) * CAR_HEIGHT - scale(d.currentHeight());
+                return carHeight+ (myBuilding.numFloors()-1) * carHeight - scale(d.currentHeight());
             })
             .attr("y2", function(d, i) {
-                return CAR_HEIGHT + CAR_HEIGHT+ (myBuilding.numFloors()-1) * CAR_HEIGHT - scale(d.currentHeight());
+                return carHeight + carHeight+ (myBuilding.numFloors()-1) * carHeight - scale(d.currentHeight());
             }); 
     }
 
